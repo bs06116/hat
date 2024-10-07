@@ -20,7 +20,7 @@ class TenantController extends Controller
     public function index()
     {
        // Fetch all tenants from the database
-       $tenants = Tenant::with(['user', 'domain'])->paginate(10);
+       $tenants = Tenant::with(['user', 'domain'])->get();
        return view('tenants.index', compact('tenants'));
     }
 
@@ -97,19 +97,24 @@ class TenantController extends Controller
         // Redirect back with success message
         return redirect()->route('tenants.index')->with('message', 'Tenant deleted successfully');
     }
-
-    public function toggleStatus($userId)
+    public function toggleStatus(Request $request)
     {
-        $user = User::find($userId);
-
-        // Check if user exists
-        if ($user) {
-            $user->status = $user->status === UserStatus::ACTIVE->value ? UserStatus::DEACTIVE : UserStatus::ACTIVE;
-            $user->save();
-            
-            return redirect()->back()->with('message', 'User status updated successfully');
+        $user = User::findOrFail($request->user_id);
+    
+        // Toggle status
+        if ($user->status === UserStatus::ACTIVE->value) {
+            $user->status = UserStatus::DEACTIVE->value;
+        } else {
+            $user->status = UserStatus::ACTIVE->value;
         }
     
-        return redirect()->back()->with('error', 'User not found');
+        $user->save();
+    
+        return response()->json([
+            'success' => true,
+            //'message' => 'Status changed successfully!',
+            'message' => " Status changed successfully!"
+        ]);
     }
+    
 }

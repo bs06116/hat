@@ -43,13 +43,15 @@
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{asset('vendor/libs/node-waves/node-waves.css')}}" />
 
-    <link rel="stylesheet" href="{{asset('vendor/libs/perfect-scrollbar/perfect-scrollbar.cs')}}" />
+    <link rel="stylesheet" href="{{asset('vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
     <link rel="stylesheet" href="{{asset('vendor/libs/typeahead-js/typeahead.css')}}" />
     <link rel="stylesheet" href="{{asset('vendor/libs/apex-charts/apex-charts.css')}}" />
     <link rel="stylesheet" href="{{asset('vendor/libs/swiper/swiper.css')}}" />
     <link rel="stylesheet" href="{{asset('vendor/libs/datatables-bs5/datatables.bootstrap5.css')}}" />
     <link rel="stylesheet" href="{{asset('vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css')}}" />
     <link rel="stylesheet" href="{{asset('vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css')}}" />
+<!-- Toastr CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
     <!-- Page CSS -->
     <link rel="stylesheet" href="{{asset('vendor/css/pages/cards-advance.css')}}"/>
@@ -63,6 +65,27 @@
 
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{asset('js/config.js')}}"></script>
+    <style type="text/css">
+      <style>
+  /* Ensure text is visible in Toastr notifications */
+      .toast {
+          color: #000 !important; /* Set text color to black */
+      }
+
+      .toast-success {
+          color: #000 !important; /* Success message text color */
+      }
+
+      .toast-error {
+          color: #000 !important; /* Error message text color */
+      }
+
+      .toast-success .toast-message,
+      .toast-error .toast-message {
+          color: #000 !important; /* Message text color */
+      }
+  </style>
+    </style>
   </head>
   <body>
 
@@ -119,8 +142,7 @@
       <div class="drag-target"></div>
     </div>
     <!-- / Layout wrapper -->
-  </body>
-
+  
 
   <script src="{{asset('vendor/libs/jquery/jquery.js')}}"></script>
     <script src="{{asset('vendor/libs/popper/popper.js')}}"></script>
@@ -144,5 +166,13 @@
 
     <!-- Page JS -->
     <script src="{{asset('js/dashboards-analytics.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @stack('scripts')
+
+<!-- Toastr JS -->
+    </body>
+
 </html>
 
