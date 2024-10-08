@@ -338,19 +338,21 @@
                       <div class="dropdown-divider my-1 mx-n2"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="pages-profile-user.html">
+                      <a class="dropdown-item" href="{{ route(name: 'profile.edit') }}">
                         <i class="ti ti-user me-3 ti-md"></i><span class="align-middle">My Profile</span>
                       </a>
                     </li>
                 
                    
                     <li>
-                      <div class="d-grid px-2 pt-2 pb-1" >
-                        <a  class="btn btn-sm btn-danger d-flex" href="{{route('logout')}}" onclick="event.preventDefault();this.closest('form').submit();">
+                     <!-- Logout Button -->
+                  <div class="d-grid px-2 pt-2 pb-1">
+                      <a class="btn btn-sm btn-danger d-flex" href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                           <small class="align-middle">Logout</small>
                           <i class="ti ti-logout ms-2 ti-14px"></i>
-                        </a>
-                      </div>
+                      </a>
+                  </div>
                     </li>
                   </ul>
                 </li>
@@ -368,3 +370,7 @@
               <i class="ti ti-x search-toggler cursor-pointer"></i>
             </div> -->
           </nav>
+          <!-- Hidden Logout Form -->
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+</form>

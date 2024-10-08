@@ -89,8 +89,8 @@ class TenantController extends Controller
     public function destroy(Tenant $tenant)
     {
        // Optional: Delete related data like users or domains if needed
-        // $tenant->user()->delete(); 
-        // $tenant->domain()->delete();
+         $tenant->user()->delete(); 
+         $tenant->domain()->delete();
         // Delete the tenant
         $tenant->delete();
 
