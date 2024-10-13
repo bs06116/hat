@@ -18,7 +18,7 @@
         <label class="form-label" for="multicol-email">Domain</label>
         <div class="input-group input-group-merge">
         <input type="text"  class="form-control" name="domain_name" placeholder="domain" aria-label="domain" aria-describedby="multicol-email2">
-        <span class="input-group-text" id="multicol-email2">@localhost.com</span>
+        <span class="input-group-text" id="multicol-email2">.{{config('app.domain')}}</span>
         </div>
         @error('domain_name')
           <div class="mt-2 text-danger">{{ $message }}</div>

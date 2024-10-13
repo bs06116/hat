@@ -16,7 +16,9 @@ class RoleSeeder extends Seeder
     {
         $input = [
             RolesEnum::SUPERADMIN,
-            RolesEnum::SITEMANAGER
+            RolesEnum::SITEMANAGER,
+            RolesEnum::SITEUSER,
+            RolesEnum::SITEDRIVER
         ];
 
         foreach ($input as $value) {

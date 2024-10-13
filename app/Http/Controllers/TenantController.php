@@ -56,7 +56,7 @@ class TenantController extends Controller
         ]);
         // Assign Role
         $user->assignRole(RolesEnum::SITEMANAGER);
-        return redirect()->back();
+        return redirect()->back()->with('success', value: 'Site created successfully.');;
     }
 
     /**

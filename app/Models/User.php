@@ -49,16 +49,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    // protected $casts = [
-    //     'status' => UserStatus::class,
-    // ];
+    protected $casts = [
+        'status' => UserStatus::class,
+    ];
 
-    // public function isActive()
-    // {
-    //     return $this->status === UserStatus::ACTIVE;
-    // }
-    // public function tenant()
-    // {
-    //     return $this->hasOne(Tenant::class, 'tenant_id', 'id');
-    // }
+    public function isActive()
+    {
+        return $this->status === UserStatus::ACTIVE;
+    }
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class, 'tenant_id', 'id');
+    }
 }

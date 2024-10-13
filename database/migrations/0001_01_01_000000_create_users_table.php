@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string(column: 'first_name')->nullable();
             $table->string(column: 'last_name')->nullable();
             $table->string(column: 'phone')->nullable();
-            $table->string('email')->unique();
+            $table->string(column: 'email')->unique();
+            $table->text(column: 'address')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string(column: 'password');
             $table->string(column: 'tenant_id')->nullable()->foreign('tenant_id')

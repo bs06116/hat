@@ -40,12 +40,12 @@
 
           <ul class="menu-inner py-1">
             <!-- Dashboards -->
-            <li class="menu-item {{ request()->is('dashboard*') ? ' active' : '' }}">
-            <a href="{{route(name: "dashboard")}}" class="menu-link">
+            <li class="menu-item {{ request()->is('AdminDashboard*') ? ' active' : '' }}">
+            <a href="{{route(name: "admin.dashboard")}}" class="menu-link">
             <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div data-i18n="Dashboards">Dashboards</div>
+                <div data-i18n="Dashboard">Dashboard</div>
               </a>
-            
+              </li>
 
             <li class="menu-item {{ request()->is('tenants*') ? ' active' : '' }}">
               <a href="{{route(name: "tenants.index")}}" class="menu-link">
@@ -54,8 +54,7 @@
               </a>
              
                 </li>
-              </ul>
-            </li>
+             
   
           </ul>
         </aside>

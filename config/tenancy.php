@@ -134,7 +134,7 @@ return [
          * disable asset() helper tenancy and explicitly use tenant_asset() calls in places
          * where you want to use tenant-specific assets (product images, avatars, etc).
          */
-        'asset_helper_tenancy' => true,
+        'asset_helper_tenancy' => false,
     ],
 
     /**
@@ -195,4 +195,10 @@ return [
         '--class' => 'DatabaseSeeder', // root seeder class
         // '--force' => true,
     ],
+    'tenant_finder' => Stancl\Tenancy\Resolvers\DomainTenantFinder::class,
+
+    // Fallback to welcome page if no tenant is found
+    'fallback_tenant' => function () {
+        return null; // Return null so that it does not find a tenant
+    },
 ];
