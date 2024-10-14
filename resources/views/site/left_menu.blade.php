@@ -53,8 +53,8 @@
                 <div data-i18n="Admins">Admins</div>
               </a>
             </li>
-            <li class="menu-item {{ request()->is('users*') ? ' active' : '' }}">
-            <a href="{{route("users.index")}}" class="menu-link">
+            <li class="menu-item {{ request()->is('drivers*') ? ' active' : '' }}">
+            <a href="{{route("drivers.index")}}" class="menu-link">
             <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div data-i18n="Drivers">Drivers</div>
               </a>

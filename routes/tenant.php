@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Tenant\SiteDashboard;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Tenant\UserController;
+use App\Http\Controllers\Tenant\DriverController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,9 +36,10 @@ Route::middleware([
         Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-        Route::resource('users', UserController::class);
+        Route::resource('users', controller: UserController::class);
         Route::post('/users/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
-
+        Route::resource('drivers', controller: DriverController::class);
+        Route::post('/drivers/toggle-status', [DriverController::class, 'toggleStatus'])->name('drivers.toggleStatus');
     });
 
 
