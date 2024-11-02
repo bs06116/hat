@@ -7,8 +7,8 @@
 :root,
 [data-bs-theme=light] {
   --bs-blue: #007bff;
-  --bs-indigo: #6610f2;
-  --bs-purple: #7367f0;
+  --bs-indigo: #00846F;
+  --bs-purple: #00846F;
   --bs-pink: #e83e8c;
   --bs-red: #ff4c51;
   --bs-orange: #fd7e14;
@@ -22,7 +22,7 @@
   --bs-gray-dark: rgba(47, 43, 61, 0.8);
   --bs-gray-25: rgba(47, 43, 61, 0.015);
   --bs-gray-50: rgba(47, 43, 61, 0.06);
-  --bs-primary: #7367f0;
+  --bs-primary: #00846F;
   --bs-secondary: #808390;
   --bs-success: #28c76f;
   --bs-info: #00bad1;
@@ -89,10 +89,10 @@
   --bs-tertiary-bg: rgba(47, 43, 61, 0.1);
   --bs-tertiary-bg-rgb: 47, 43, 61;
   --bs-heading-color: #444050;
-  --bs-link-color: #7367f0;
+  --bs-link-color: #00846F;
   --bs-link-color-rgb: 115, 103, 240;
   --bs-link-decoration: none;
-  --bs-link-hover-color: #685dd8;
+  --bs-link-hover-color: #00846F;
   --bs-link-hover-color-rgb: 104, 93, 216;
   --bs-code-color: #e83e8c;
   --bs-highlight-color: #6d6b77;

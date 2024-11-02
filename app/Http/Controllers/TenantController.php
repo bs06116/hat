@@ -9,6 +9,7 @@ use App\UserStatus;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use App\Http\Requests\TenantStoreRequest;
+use Illuminate\Support\Facades\Auth;
 use Hash;
 
 
@@ -19,6 +20,9 @@ class TenantController extends Controller
      */
     public function index()
     {
+        if (!Auth::user()->hasRole(RolesEnum::SUPERADMIN->value)) {
+            abort(code: 403);
+        }
        // Fetch all tenants from the database
        $tenants = Tenant::with(['user', 'domain'])->get();
        return view('tenants.index', compact('tenants'));
@@ -29,6 +33,9 @@ class TenantController extends Controller
      */
     public function create()
     {
+        if (!Auth::user()->hasRole(RolesEnum::SUPERADMIN->value)) {
+            abort(code: 403);
+        }
         return view(view: 'tenants/create');
 
     }
@@ -38,6 +45,9 @@ class TenantController extends Controller
      */
     public function store(TenantStoreRequest $request)
     {  
+        if (!Auth::user()->hasRole(RolesEnum::SUPERADMIN->value)) {
+            abort(code: 403);
+        }
          // Create Tenant
          $tenant = Tenant::create([
             //'id' => uniqid(), // Or use auto-incrementing ID
@@ -56,7 +66,7 @@ class TenantController extends Controller
         ]);
         // Assign Role
         $user->assignRole(RolesEnum::SITEMANAGER);
-        return redirect()->back()->with('success', value: 'Site created successfully.');;
+        return redirect()->route('tenants.index')->with('success', value: 'Site created successfully.');;
     }
 
     /**
@@ -64,6 +74,9 @@ class TenantController extends Controller
      */
     public function show(Tenant $tenant)
     {
+        if (!Auth::user()->hasRole(RolesEnum::SUPERADMIN->value)) {
+            abort(code: 403);
+        }
        
     }
 
@@ -72,6 +85,9 @@ class TenantController extends Controller
      */
     public function edit(Tenant $tenant)
     {
+        if (!Auth::user()->hasRole(RolesEnum::SUPERADMIN->value)) {
+            abort(code: 403);
+        }
         //
     }
 
@@ -80,6 +96,9 @@ class TenantController extends Controller
      */
     public function update(Request $request, Tenant $tenant)
     {
+        if (!Auth::user()->hasRole(RolesEnum::SUPERADMIN->value)) {
+            abort(code: 403);
+        }
         //
     }
 
@@ -88,6 +107,9 @@ class TenantController extends Controller
      */
     public function destroy(Tenant $tenant)
     {
+        if (!Auth::user()->hasRole(RolesEnum::SUPERADMIN->value)) {
+            abort(code: 403);
+        }
        // Optional: Delete related data like users or domains if needed
          $tenant->user()->delete(); 
          $tenant->domain()->delete();
@@ -99,6 +121,9 @@ class TenantController extends Controller
     }
     public function toggleStatus(Request $request)
     {
+        if (!Auth::user()->hasRole(RolesEnum::SUPERADMIN->value)) {
+            abort(code: 403);
+        }
         $user = User::findOrFail($request->user_id);
     
         // Toggle status

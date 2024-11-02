@@ -14,7 +14,8 @@
         <thead>
           <tr>
             <th>Site Name</th>
-            <th>Site Owner</th>
+            <th>Site Admin</th>
+            <th>Email</th>
             <th>Domain</th>
             <th>Status</th>
             <th>Actions</th>
@@ -31,18 +32,22 @@
                 {{ $tenant->user->first_name.' '.$tenant->user->last_name }}
               </td> 
               <td>
+                {{ $tenant->user->email }}
+              </td>
+              <td>
                 {{ $tenant->domain->domain }}
               </td>
               <td>
+              <span class="text-danger">Suspended</span>
                 <div class="form-check form-switch mb-2">
-                    <input data-status="{{ $tenant->user->status }}"  
-                           data-id="{{ $tenant->user->id }}"  
-                           class="form-check-input status-toggle" 
-                           {{ $tenant->user->status == \App\UserStatus::ACTIVE->value ? 'checked' : '' }} 
-                           type="checkbox" id="flexSwitchCheckDefault">
-                    <label class="form-check-label" for="flexSwitchCheckDefault">
-                        {{ $tenant->user->status == \App\UserStatus::ACTIVE->value ? \App\UserStatus::ACTIVE->name : \App\UserStatus::DEACTIVE->name }}
-                    </label>
+                  <input data-status="{{$tenant->user->status}}"  
+                        data-id="{{ $tenant->user->id }}"  
+                        class="form-check-input status-toggle" 
+                        {{ $tenant->user->status->value == \App\UserStatus::ACTIVE->value ? 'checked' : '' }} 
+                        type="checkbox" id="flexSwitchCheckDefault">
+                  <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                </div>
+                <span class="text-success">Active</span>
                 </div>
               </td>
               <td>
@@ -54,7 +59,7 @@
                     <form method="POST" action="{{ route('tenants.destroy', $tenant->id) }}" style="display:inline;">
                       @csrf
                       @method('DELETE')
-                      <button class="dropdown-item" type="submit"><i class="ti ti-trash me-2"></i> Delete</button>
+                      <button class="btn btn-danger" type="submit"><i class="ti ti-trash me-2"></i> Delete</button>
                     </form>
                   </div>
                 </div>
@@ -105,6 +110,7 @@
   });
 </script>
 <script>
+
     @if (session('success'))
         toastr.success("{{ session('success') }}");
     @endif

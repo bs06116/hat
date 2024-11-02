@@ -53,15 +53,17 @@ class AuthenticatedSessionController extends Controller
 }
 private function redirectUser($user)
 {
-    if (empty(tenant('id'))) {
-        if ($user->hasRole(RolesEnum::SUPERADMIN)) {
-            return redirect()->intended(route('admin.dashboard'));
-        }
-    } else {
-        return redirect()->intended(route('site.dashboard'));
+    if ($user->hasRole(RolesEnum::SUPERADMIN)) {
+        return redirect()->intended(route('admin.dashboard'));
+    }elseif($user->hasRole(RolesEnum::SITEMANAGER)){
+        return redirect()->intended(default: route('site.dashboard'));
+
+    }elseif($user->hasRole(RolesEnum::SITEDRIVER)){
+        return redirect()->intended(default: route('driver.dashboard'));
+
     }
 }
-
+   
     // public function store(LoginRequest $request): RedirectResponse
     // {
        
@@ -86,8 +88,8 @@ private function redirectUser($user)
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
-
-        return redirect('/');
+        return redirect(env('APP_URL'));
+        //return redirect('/');
     }
 
      /**

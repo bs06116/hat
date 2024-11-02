@@ -8,14 +8,14 @@
 
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <!-- Search -->
-              <div class="navbar-nav align-items-center">
+              <!-- <div class="navbar-nav align-items-center">
                 <div class="nav-item navbar-search-wrapper mb-0">
                   <a class="nav-item nav-link search-toggler d-flex align-items-center px-0" href="javascript:void(0);">
                     <i class="ti ti-search ti-md me-2 me-lg-4 ti-lg"></i>
                     <span class="d-none d-md-inline-block text-muted fw-normal">Search (Ctrl+/)</span>
                   </a>
                 </div>
-              </div>
+              </div> -->
               <!-- /Search -->
 
               <ul class="navbar-nav flex-row align-items-center ms-auto">
@@ -68,7 +68,7 @@
                       <span class="badge rounded-pill bg-danger badge-dot badge-notifications border"></span>
                     </span>
                   </a>
-                  <ul class="dropdown-menu dropdown-menu-end p-0">
+                  <ul class="dropdown-menu dropdown-menu-end p-0" style="display:none">
                     <li class="dropdown-menu-header border-bottom">
                       <div class="dropdown-header d-flex align-items-center py-3">
                         <h6 class="mb-0 me-auto">Notification</h6>

@@ -15,9 +15,14 @@ class DriverUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
+         // Validate the incoming request
+         return [
+            'first_name' => 'required|string|max:255',
+            'last_name'  => 'required|string|max:255',
+            'email'      => 'required|email|unique:users,email,' . $this->driver->id, // Ensure unique email except for the current user
+            'password'   => 'nullable|min:8|confirmed', // Password is optional
+            'departments' => 'required|array', // Departments must be an array
+            'departments.*' => 'exists:departments,id', // Each department must exist in the departments table
         ];
     }
    /**
@@ -28,8 +33,14 @@ class DriverUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.unique' => 'This email has already been taken.',
-            // Add other custom messages if needed
+            'first_name.required' => 'First name is required.',
+            'last_name.required'  => 'Last name is required.',
+            'email.required'      => 'Email is required.',
+            'email.unique'        => 'This email is already taken.',
+            'password.min'        => 'Password must be at least 8 characters.',
+            'password.confirmed'  => 'Passwords do not match.',
+            'departments.required' => 'You must select at least one department.',
+            'departments.*.exists' => 'Selected department is invalid.',
         ];
     }
 }

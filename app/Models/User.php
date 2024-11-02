@@ -47,6 +47,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'status' => UserStatus::class, // This is fine for your UserStatus enum
         ];
     }
     protected $casts = [
@@ -61,4 +62,21 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Tenant::class, 'tenant_id', 'id');
     }
+    public function departments()
+    {
+        return $this->belongsToMany(Department::class, 'driver_department');
+    }
+    public function jobs()
+    {
+        return $this->belongsToMany(Job::class, 'driver_assign_job');
+    }
+    public function driverJobs()
+    {
+        return $this->belongsToMany(Job::class, 'job_bid')
+                    ->withTimestamps();
+    }public function jobsBids()
+    {
+        return $this->belongsToMany(Job::class, 'job_bid', 'driver_id', 'job_id');
+    }
+
 }

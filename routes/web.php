@@ -15,7 +15,7 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('admin/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('admin/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::resource('tenants', TenantController::class);
+    Route::resource('tenants', controller: TenantController::class);
    // Route::patch('/tenants/{tenant}/toggle-status', [TenantController::class, 'toggleStatus'])->name('tenants.toggleStatus');
    Route::post('/tenants/toggle-status', [TenantController::class, 'toggleStatus'])->name('tenants.toggleStatus');
 

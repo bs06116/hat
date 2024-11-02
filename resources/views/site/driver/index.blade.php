@@ -15,6 +15,7 @@
           <tr>
             <th>Full Name</th>
             <th>Email</th>
+            <th>Department</th>
             <th>Status</th>
             <th>Created Date</th>
             <th>Actions</th>
@@ -29,34 +30,41 @@
               </td>
               <td>
                 {{ $driver->email }}
-              </td> 
+              </td>
+              <td>
+              @foreach($driver->departments as $department)
+                            {{ $department->name }}@if(!$loop->last), @endif
+                        @endforeach
+              </td>
              
               <td>
-                <div class="form-check form-switch mb-2">
+              <div class="d-flex justify-content-between align-items-center">
+              <span class="text-danger">Suspended</span>
+
+                  <div class="form-check form-switch mb-2">
                     <input data-status="{{ $driver->status }}"  
-                           data-id="{{ $driver->id }}"  
-                           class="form-check-input status-toggle" 
-                           {{ $driver->status == \App\UserStatus::ACTIVE->value ? 'checked' : '' }} 
-                           type="checkbox" id="flexSwitchCheckDefault">
-                    <label class="form-check-label" for="flexSwitchCheckDefault">
-                        {{ $driver->status == \App\UserStatus::ACTIVE->value ? \App\UserStatus::ACTIVE->name : \App\UserStatus::DEACTIVE->name }}
-                    </label>
-                </div>
+                          data-id="{{ $driver->id }}"  
+                          class="form-check-input status-toggle" 
+                          {{ $driver->status->value == \App\UserStatus::ACTIVE->value ? 'checked' : '' }} 
+                          type="checkbox" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                  </div>
+                  <span class="text-success">Active</span>
+              </div>
               </td>
               <td>
                 {{ $driver->created_at->format('d-m-Y') }}
               </td> 
               <td>
-              <a href="{{route('users.edit', $driver->id)}}">
-                <button class="dropdown-item"><i class="ti ti-edit me-2"></i></button>
+              <a href="{{route('drivers.edit', $driver->id)}}">
+                <button class="btn btn-warning"><i class="ti ti-edit me-2"></i></button>
               </a>
 
-              <form method="POST" action="{{ route('users.destroy', $driver->id) }}"  onsubmit="return confirm('Are you sure you want to delete this user?');" style="display:inline;">
+              <form method="POST" action="{{ route('drivers.destroy', $driver->id) }}"  onsubmit="return confirm('Are you sure you want to delete this user?');" style="display:inline;">
                       @csrf
                       @method('DELETE')
-                      <button class="dropdown-item" type="submit"><i class="ti ti-trash me-2"></i></button>
+                      <button type="submit" class="btn btn-danger"><i class="ti ti-trash me-2"></i></button>
                 </form>
-  
               </td>
             </tr>
           @empty

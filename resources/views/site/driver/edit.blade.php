@@ -3,14 +3,14 @@
 <div class="container-xxl flex-grow-1 container-p-y">
   <div class="card mb-6">
     <h5 class="card-header">Edit User</h5>
-    <form method="POST" action="{{ route('users.update', $user->id) }}" class="card-body">
+    <form method="POST" action="{{ route('drivers.update', $driver->id) }}" class="card-body">
       @csrf
       @method('PUT')
 
       <!-- First Name -->
       <div class="mt-4">
         <label for="first_name" class="form-label">First Name</label>
-        <input type="text" id="first_name" name="first_name" value="{{ old('first_name', $user->first_name) }}" class="form-control" required autofocus />
+        <input type="text" id="first_name" name="first_name" value="{{ old('first_name', $driver->first_name) }}" class="form-control" required autofocus />
         @error('first_name')
           <div class="mt-2 text-danger">{{ $message }}</div>
         @enderror
@@ -19,7 +19,7 @@
       <!-- Last Name -->
       <div class="mt-4">
         <label for="last_name" class="form-label">Last Name</label>
-        <input type="text" id="last_name" name="last_name" value="{{ old('last_name', $user->last_name) }}" class="form-control" required />
+        <input type="text" id="last_name" name="last_name" value="{{ old('last_name', $driver->last_name) }}" class="form-control" required />
         @error('last_name')
           <div class="mt-2 text-danger">{{ $message }}</div>
         @enderror
@@ -28,7 +28,7 @@
       <!-- Email -->
       <div class="mt-4">
         <label for="email" class="form-label">Email</label>
-        <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" class="form-control" required />
+        <input type="email" id="email" name="email" value="{{ old('email', $driver->email) }}" class="form-control" required />
         @error('email')
           <div class="mt-2 text-danger">{{ $message }}</div>
         @enderror
@@ -52,10 +52,28 @@
         @enderror
       </div>
 
-      <!-- Submit and Cancel -->
-      <div class="pt-4">
+     
+      <!-- Departments (multi-select) -->
+      <div class="mt-4">
+          <label for="departments" class="form-label">Departments</label>
+          @foreach($departments as $department)
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="department_{{ $department->id }}" 
+                       name="departments[]" value="{{ $department->id }}"
+                       {{ $driver->departments->contains($department->id) ? 'checked' : '' }}>
+                <label class="form-check-label" for="department_{{ $department->id }}">
+                    {{ $department->name }}
+                </label>
+            </div>
+        @endforeach
+          @error('departments')
+              <div class="mt-2 text-danger">{{ $message }}</div>
+          @enderror
+      </div>
+ <!-- Submit and Cancel -->
+ <div class="pt-4">
         <button type="submit" class="btn btn-primary me-4">Update</button>
-        <a href="{{ route('users.index') }}" class="btn btn-secondary">Cancel</a>
+        <a href="{{ route('drivers.index') }}" class="btn btn-secondary">Cancel</a>
       </div>
     </form>
   </div>

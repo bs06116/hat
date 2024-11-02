@@ -32,29 +32,33 @@
               </td> 
              
               <td>
-                <div class="form-check form-switch mb-2">
+              <div class="d-flex justify-content-between align-items-center">
+              <span class="text-danger">Suspended</span>
+
+                  <div class="form-check form-switch mb-2">
                     <input data-status="{{ $user->status }}"  
-                           data-id="{{ $user->id }}"  
-                           class="form-check-input status-toggle" 
-                           {{ $user->status == \App\UserStatus::ACTIVE->value ? 'checked' : '' }} 
-                           type="checkbox" id="flexSwitchCheckDefault">
-                    <label class="form-check-label" for="flexSwitchCheckDefault">
-                        {{ $user->status == \App\UserStatus::ACTIVE->value ? \App\UserStatus::ACTIVE->name : \App\UserStatus::DEACTIVE->name }}
-                    </label>
-                </div>
+                          data-id="{{ $user->id }}"  
+                          class="form-check-input status-toggle" 
+                          {{ $user->status->value == \App\UserStatus::ACTIVE->value ? 'checked' : '' }} 
+                          type="checkbox" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                  </div>
+                  <span class="text-success">Active</span>
+              </div>
+               
               </td>
               <td>
                 {{ $user->created_at->format('d-m-Y') }}
               </td> 
               <td>
               <a href="{{route('users.edit', $user->id)}}">
-                <button class="dropdown-item"><i class="ti ti-edit me-2"></i></button>
+                <button class="btn btn-warning"><i class="ti ti-edit me-2"></i></button>
               </a>
 
               <form method="POST" action="{{ route('users.destroy', $user->id) }}"  onsubmit="return confirm('Are you sure you want to delete this user?');" style="display:inline;">
                       @csrf
                       @method('DELETE')
-                      <button class="dropdown-item" type="submit"><i class="ti ti-trash me-2"></i></button>
+                      <button class="btn btn-danger" type="submit"><i class="ti ti-trash me-2"></i></button>
                 </form>
   
               </td>

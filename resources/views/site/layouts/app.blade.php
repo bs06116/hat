@@ -65,25 +65,31 @@
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{asset('js/config.js')}}"></script>
     <style type="text/css">
-      <style>
-  /* Ensure text is visible in Toastr notifications */
-      .toast {
-          color: #000 !important; /* Set text color to black */
-      }
+   /* Success Notification */
+   #toast-container .toast-success {
+        background-color: #28a745 !important;  /* Green */
+        color: white !important;
+        border-color: #28a745 !important; /* Optional: Add border for clarity */
+    }
 
-      .toast-success {
-          color: #000 !important; /* Success message text color */
-      }
+    /* Error Notification */
+    #toast-container .toast-error {
+        background-color: #dc3545 !important;  /* Red */
+        color: white !important;
+    }
 
-      .toast-error {
-          color: #000 !important; /* Error message text color */
-      }
+    /* Info Notification */
+    #toast-container .toast-info {
+        background-color: #17a2b8 !important;  /* Blue */
+        color: white !important;
+    }
 
-      .toast-success .toast-message,
-      .toast-error .toast-message {
-          color: #000 !important; /* Message text color */
-      }
-  </style>
+    /* Warning Notification */
+    #toast-container .toast-warning {
+        background-color: #ffc107 !important;  /* Yellow */
+        color: black !important;
+    }
+  
     </style>
   </head>
   <body>
@@ -92,7 +98,11 @@
    <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
         <!-- Menu -->
-        @include('site.left_menu')
+        @if (Auth::user()->hasRole(\App\RolesEnum::SITEDRIVER->value))
+           @include( 'site.left_menu_driver')
+          @else
+          @include('site.left_menu')
+        @endif
         <!-- / Menu -->
         <!-- Layout container -->
         <div class="layout-page">
@@ -118,8 +128,8 @@
                     <script>
                       document.write(new Date().getFullYear());
                     </script>
-                    , made with ❤️ by <a href="https://pixinvent.com" target="_blank" class="footer-link">Pixinvent</a>
-                  </div>
+                    , made with ❤️ by <a href="https://aethon.digital/" target="_blank" class="footer-link">Aethon.digital</a>
+                    </div>
             
                   </div>
                 </div>

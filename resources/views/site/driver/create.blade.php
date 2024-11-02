@@ -54,10 +54,24 @@
         </textarea>
      
       </div>
+        <!-- Address -->
+        <div class="mt-4">
+        <label for="department" class="form-label">Department</label>
+        @foreach($departments as $department)
+            <div>
+                <input type="checkbox" name="departments[]" value="{{ $department->id }}">
+                <label>{{ $department->name }}</label>
+            </div>
+        @endforeach
+        @error('departments')
+          <div class="mt-2 text-danger">{{ $message }}</div>
+        @enderror
+     
+      </div>
       <!-- Submit and Cancel -->
       <div class="pt-4">
         <button type="submit" class="btn btn-primary me-4">Submit</button>
-        <a href="{{ route('tenants.index') }}" class="btn btn-secondary">Cancel</a>
+        <a href="{{ route('drivers.index') }}" class="btn btn-secondary">Cancel</a>
       </div>
     </form>
   </div>

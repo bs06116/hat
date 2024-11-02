@@ -43,7 +43,7 @@ class TenantStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'domain_name.regex' => 'The domain must be at least 10 characters, and can only contain letters, numbers, and hyphens. No spaces or dots are allowed.',
+            'domain_name.regex' => 'The domain can only contain letters, numbers, and hyphens. No spaces or dots are allowed.',
             'domain_name.required' => 'The domain name is required.',
             'email.unique' => 'This email has already been taken.',
             // Add other custom messages if needed
