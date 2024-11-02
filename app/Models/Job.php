@@ -43,6 +43,10 @@ class Job extends Model
     {
         return $this->belongsToMany(User::class, 'job_bid', 'job_id', 'driver_id');
     }
+    public function bids()
+    {
+        return $this->hasMany(JobBid::class, 'job_id'); // Replace 'job_id' if it uses a different foreign key
+    }
     // public function drivers()
     // {
     //     return $this->belongsToMany(User::class, 'driver_assign_job');

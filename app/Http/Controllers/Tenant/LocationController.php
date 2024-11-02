@@ -25,7 +25,7 @@ class LocationController extends Controller
         if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
             abort(code: 403);
         }
-        $locations = Location::all();
+        $locations = Location::orderBy( 'created_at', 'desc')->get();
         return view('site.location.index', compact('locations'));
     }
 

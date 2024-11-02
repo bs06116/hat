@@ -57,7 +57,7 @@ Route::middleware([
     
         // Job Management
         Route::get('/jobs/available', [JobController::class, 'availableJobs'])->name('jobs.available');
-        Route::get('/jobs/won', [JobController::class, 'jobsWon'])->name('jobs.won');
+        Route::get('/jobs/won',  [JobController::class, 'wonJobs'])->name('jobs.won');
         Route::get('/jobs/{job}/available',  [JobController::class, 'showAavailableJob'])->name('jobs.showAavailableJob');
         Route::post('/jobs/{job}/bid',  [JobController::class, 'submitBid'])->name('jobs.submitBid');
       // Route to assign a job to a driver

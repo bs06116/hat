@@ -34,9 +34,17 @@ class DriverController extends Controller
         $query->select('job_id')
               ->from('department_job')
               ->whereIn('department_id', $driverDepartmentIds); // Filter by department IDs
-        })
+        })->whereDoesntHave('bidders')
         ->count();
-         return view('site.driver.dashboard',compact('totalAvailableJobs'));
+        $totalWonJobs = Job::whereIn('id', function ($query) use ($driverDepartmentIds) {
+           $query->select('job_id')
+                 ->from('department_job')
+                 ->whereIn('department_id', $driverDepartmentIds); // Filter by department IDs
+       })->whereHas('bids', function ($query) use ($driver) {
+           $query->where('driver_id', $driver->id)
+                 ->where('assigned', 1); // Only include assigned bids
+       })->count();
+         return view('site.driver.dashboard',compact('totalAvailableJobs','totalWonJobs'));
     }
   /**
      * Display a listing of the resource.

@@ -22,7 +22,8 @@ class JobController extends Controller
         if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
             abort(code: 403);
         }
-        $jobs = Job::with(['departments', 'location'])->get();
+        $jobs = Job::with(['departments', 'location'])->orderBy('id', 'desc')  // Order by latest
+        ->get();
         return view('site.job.index', compact('jobs'));
     }
 
@@ -62,8 +63,8 @@ class JobController extends Controller
                 'end_date' => $request->end_date,
                 'hourly_pay' => $request->hourly_pay,
                 'start_time' => $request->start_time, // Validate time format
-        'end_time' => $request->end_time,   // Validate time format
-        'description' => $request->description
+                'end_time' => $request->end_time,   // Validate time format
+                'description' => $request->description
             ]);
     
             // Check if Job creation was successful
@@ -109,11 +110,14 @@ class JobController extends Controller
             abort(code: 403);
         }
         $driver = auth()->user();
+            // Check if the job has been assigned
+        $assignedBid = $job->driversBids()->where('assigned', 1)->first();
+        // Check if the authenticated driver is the one assigned to this job
+        $isAssignedToMe = $assignedBid && $assignedBid->driver_id === $driver->id;
+            // Check if the driver has already placed a bid on this job
+        $hasBid = $job->driversBids()->exists();
 
-        // Check if the driver has already placed a bid on this job
-        $hasBid = $job->driversBids()->where('driver_id', $driver->id)->exists();
-
-        return view('site.job.show_driver_single_job', compact('job', 'hasBid'));
+        return view('site.job.show_driver_single_job', compact('job', 'assignedBid', 'isAssignedToMe','hasBid'));
       
     }
     public function edit(Job $job)
@@ -187,18 +191,28 @@ class JobController extends Controller
             $query->select('job_id')
                   ->from('department_job')
                   ->whereIn('department_id', $driverDepartmentIds); // Filter by department IDs
-        })
+        })->whereDoesntHave('bidders') // Exclude jobs that have bids
+        ->orderBy('created_at', 'desc')  // Order by latest
         ->get();
          return view('site.job.available', compact('availableJobs'));
      }
  
      // Show jobs the driver has won
-     public function jobsWon()
+     public function wonJobs()
      {
          $driver = auth()->user(); // Assuming the driver is authenticated
-         $jobsWon = $driver->jobs; // Assuming there's a relationship set up between drivers and jobs
- 
-         return view('job.won', compact('jobsWon'));
+         $driverDepartmentIds = $driver->departments->pluck('id'); // Get department IDs for the driver
+         $wonJobs = Job::whereIn('id', function ($query) use ($driverDepartmentIds) {
+            $query->select('job_id')
+                  ->from('department_job')
+                  ->whereIn('department_id', $driverDepartmentIds); // Filter by department IDs
+        })->whereHas('bids', function ($query) use ($driver) {
+            $query->where('driver_id', $driver->id)
+                  ->where('assigned', 1); // Only include assigned bids
+        })
+        ->orderBy('created_at', 'desc')  // Order by latest
+        ->get();
+         return view('site.job.won', compact('wonJobs'));
      }
  
      // Bid for a job
@@ -224,8 +238,6 @@ class JobController extends Controller
             if ($job->driversBids()->where('driver_id', $driver->id)->exists()) {
                 return redirect()->route('jobs.showAavailableJob', $job)->with('error', 'You have already bid for this job.');
             }
-
-          
         // Create a new bid for this job by the driver
         $jobBid = new JobBid();
         $jobBid->job_id = $job->id; // Assign job id
@@ -252,6 +264,7 @@ class JobController extends Controller
             
             if ($jobBid) {
                 $jobBid->assigned = 1; // Mark the new driver as assigned
+                $jobBid->bid_date = now();
                 $jobBid->save();
 
                 return redirect()->route('jobs.index')->with('success', 'Job assigned successfully!');

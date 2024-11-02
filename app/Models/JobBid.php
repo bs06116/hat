@@ -11,6 +11,9 @@ class JobBid extends Model
 
     protected $table = 'job_bid'; // Ensure this matches your actual table name
 
+    protected $casts = [
+        'bid_date' => 'datetime'
+    ];
     // Define relationships
     public function job()
     {

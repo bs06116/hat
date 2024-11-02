@@ -41,7 +41,7 @@
                             ><i class="ti ti-briefcase ti-28px"></i
                           ></span>
                         </div>
-                        <h4 class="mb-0">0</h4>
+                        <h4 class="mb-0">{{$totalWonJobs}}</h4>
                       </div>
                       <p class="mb-1">Total Won Jobs</p>
                       <!-- <p class="mb-0">

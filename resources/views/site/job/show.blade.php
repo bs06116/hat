@@ -58,7 +58,7 @@
             <thead>
               <tr>
                 <th>Driver</th>
-                <th>Assigned</th>
+                <th>Assigned Date</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -67,11 +67,12 @@
                 <tr>
                   <td>{{ $bid->driver->first_name.' '.$bid->driver->last_name }}</td>
                   <td>
-                    @if($bid->assigned)
+                  {{ $bid->bid_date?->format('d-m-Y') }}
+                    <!-- @if($bid->assigned)
                       <span class="badge bg-success">Assigned</span>
                     @else
                       <span class="badge bg-danger">Not Assigned</span>
-                    @endif
+                    @endif -->
                   </td>
                   <td>
                     @if(!$bid->assigned)
