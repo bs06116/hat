@@ -9,7 +9,7 @@
 
     <div class="card mb-4">
       <div class="card-header">
-        <h4 class="card-title">{{ $job->title }}</h4>
+        <h4 class="card-title">{{ $job->job_department_title?->job_title }}</h4>
       </div>
       <div class="card-body">
         <div class="row mb-3">
@@ -26,18 +26,18 @@
         </div>
         <div class="row mb-3">
           <div class="col-md-6">
-            <p><strong>Start Date:</strong> </p>
+            <p><strong>Start Date:</strong> {{ $job->start_date }} </p>
           </div>
           <div class="col-md-6">
-            <p><strong>End Date:</strong></p>
+            <p><strong>End Date:</strong> {{ $job->end_date }}</p>
           </div>
         </div>
         <div class="row mb-3">
           <div class="col-md-6">
-            <p><strong>Shift Start Time:</strong> </p>
+            <p><strong>Shift Start Time:</strong> {{   date('h:i A', strtotime($job->start_time)) }}</p>
           </div>
           <div class="col-md-6">
-            <p><strong>Shift End Time:</strong></p>
+            <p><strong>Shift End Time:</strong> {{   date('h:i A', strtotime($job->end_time)) }}</p>
           </div>
         </div>
         <div class="row mb-3">

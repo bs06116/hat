@@ -22,7 +22,7 @@
               </a>
             </li>
             
-            <li class="menu-item {{ request()->is('job*') ? ' active' : '' }}">
+            <li class="menu-item {{ request()->is('job*') ? ' active open' : '' }} ">
               
               <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class="menu-icon tf-icons ti ti-briefcase"></i>
@@ -30,13 +30,13 @@
                       <div data-i18n="Jobs">Jobs</div>
                     </a>
               <ul class="menu-sub">
-                    <li class="menu-item">
+                    <li class="menu-item {{ request()->is('jobs/available') ? ' active' : '' }} ">
                     <a href="{{route("jobs.available")}}" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-mail"></i>
                     <div data-i18n="Available Jobs">Available Jobs</div>
                       </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item {{ request()->is('jobs/won') ? ' active' : '' }}">
                       
                       <a href="{{route("jobs.won")}}" class="menu-link">
 
@@ -57,7 +57,12 @@
                 <div data-i18n="Invoicing">Invoicing</div>
               </a>
             </li>
-            
+            <li class="menu-item {{ request()->is('user/profile*') ? ' active' : '' }}">
+            <a href="{{route("user.profile.edit")}}" class="menu-link">
+            <i class="menu-icon tf-icons ti ti-user"></i>
+                <div data-i18n="Profile">Profile</div>
+              </a>
+            </li>
            
           </ul>
         </aside>

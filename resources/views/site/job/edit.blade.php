@@ -7,11 +7,10 @@
     <form method="POST" action="{{ route('jobs.update', $job->id) }}" class="card-body">
       @csrf
       @method('PUT')
-
       <!-- Department Selection -->
       <div class="mt-4">
     <label for="department" class="form-label">Departments</label>
-    <select name="department_ids[]" id="department" class="form-control" multiple required>
+    <select name="department_ids[]" id="department" class="form-control"  required>
         @foreach($departments as $department)
             <option value="{{ $department->id }}" {{ in_array($department->id, old('department_ids', $job->departments->pluck('id')->toArray())) ? 'selected' : '' }}>
                 {{ $department->name }}
@@ -22,6 +21,12 @@
         <div class="mt-2 text-danger">{{ $message }}</div>
     @enderror
 </div>
+  <!-- Job Title -->
+  <div class="mt-4">
+          <label for="title" class="form-label">Job Title</label>
+          <select id="job_title" name="title" class="form-control" required>
+        <option value="">Select a Job Title</option>
+    </select>
       <!-- Location Selection -->
       <div class="mt-4">
         <label for="location" class="form-label">Location</label>
@@ -38,14 +43,7 @@
         @enderror
       </div>
 
-      <!-- Job Title -->
-      <div class="mt-4">
-        <label for="title" class="form-label">Job Title</label>
-        <input type="text" id="title" name="title" value="{{ old('title', $job->title) }}" class="form-control" required />
-        @error('title')
-          <div class="mt-2 text-danger">{{ $message }}</div>
-        @enderror
-      </div>
+    
 
       <!-- Start Date -->
       <div class="mt-4">
@@ -120,5 +118,35 @@
     @if (session('error'))
         toastr.error("{{ session('error') }}");
     @endif
+</script>
+<script>
+    $(document).ready(function() {
+      $('#department').trigger('change');
+    });
+    $('#department').change(function() {
+            var departmentId = $(this).val();
+            if (!departmentId) {
+                // Debugging: Check the fallback department IDs
+                departmentId = @json($job->departments->pluck('id')); // Ensure this is properly rendered from Laravel
+            }
+            if (departmentId) {
+                $.ajax({
+                  url: "{{ route('get.job.title', ':id') }}".replace(':id', departmentId),
+                  type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                      var selectedJobTitle = @json($job->title);  // Pass the selected job title from Laravel into JavaScript
+                        $('#job_title').empty().append('<option value="">Select a Job Title</option>');
+                        $.each(data, function(key, value) {
+                          console.log(selectedJobTitle);
+                          var selected = (selectedJobTitle == key) ? 'selected' : '';  // Check if the job title matches and set 'selected'
+                          $('#job_title').append('<option value="' + key + '" ' + selected + '>' + value + '</option>');
+                      });
+                    }
+                });
+            } else {
+                $('#job_title').empty().append('<option value="">Select a Job Title</option>');
+            }
+        });
 </script>
 @endpush

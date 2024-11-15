@@ -10,9 +10,9 @@
       <table class="table">
         <thead>
           <tr>
+           <th>Job Title</th>
             <th>Department</th>
             <th>Base Location</th>
-            <th>Job Title</th>
             <th>Shift Time</th>
             <th>Hourly Pay (&pound;)</th>
             <th>Status</th>
@@ -23,12 +23,13 @@
         <tbody class="table-border-bottom-0">
           @forelse ($availableJobs as $job)
             <tr>
+            <td>{{ $job->job_department_title?->job_title }}</td>
+
               <td> @foreach($job->departments as $department)
                             {{ $department->name }}@if(!$loop->last), @endif
                         @endforeach
               </td>
               <td>{{ $job->location->name }}</td>
-              <td>{{ $job->title }}</td>
               <td>{{ $job->start_time }} - {{ $job->end_time }}</td>
               <td>£{{ $job->hourly_pay }}</td>
               <td></td>

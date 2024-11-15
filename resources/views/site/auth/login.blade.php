@@ -82,11 +82,18 @@
         <!-- /Left Text -->
 
         <!-- Login -->
+ 
         <div class="d-flex col-12 col-lg-4 align-items-center authentication-bg p-sm-12 p-6">
           <div class="w-px-400 mx-auto mt-12 pt-5">
             <h4 class="mb-1">Welcome to HATS! 👋</h4>
             <p class="mb-6">Please sign-in to your account and start the adventure</p>
-
+            @if ($errors->any())
+              <div class="alert alert-danger">
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+          @endif
             <form id="formAuthentication" class="mb-4"  method="POST" action="{{ route('site.login') }}">
             @csrf
              <div class="mb-6">
@@ -118,9 +125,9 @@
                     <input class="form-check-input" type="checkbox" id="remember-me" />
                     <label class="form-check-label" for="remember-me"> Remember Me </label>
                   </div>
-                  <a href="">
+                  <!-- <a href="">
                     <p class="mb-0">Forgot Password?</p>
-                  </a>
+                  </a> -->
                 </div>
               </div>
               <button class="btn btn-primary d-grid w-100">Sign in</button>

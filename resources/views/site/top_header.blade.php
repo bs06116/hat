@@ -338,7 +338,7 @@
                       <div class="dropdown-divider my-1 mx-n2"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="{{ route(name: 'profile.edit') }}">
+                      <a class="dropdown-item" href="{{ route(name: 'user.profile.edit') }}">
                         <i class="ti ti-user me-3 ti-md"></i><span class="align-middle">My Profile</span>
                       </a>
                     </li>

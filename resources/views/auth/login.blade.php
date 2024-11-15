@@ -85,7 +85,13 @@
           <div class="w-px-400 mx-auto mt-12 pt-5">
             <h4 class="mb-1">Welcome to HATS! 👋</h4>
             <p class="mb-6">Please sign-in to your account and start the adventure</p>
-
+            @if ($errors->any())
+              <div class="alert alert-danger">
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+          @endif
             <form id="formAuthentication" class="mb-4"  method="POST" action="{{ route('adminlogin') }}">
             @csrf
              <div class="mb-6">

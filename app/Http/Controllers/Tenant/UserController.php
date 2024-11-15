@@ -12,6 +12,9 @@ use Illuminate\Validation\Rules;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\RedirectResponse;
 
 use Hash;
 
@@ -145,5 +148,36 @@ class UserController extends Controller
             'success' => true,
             'message' => 'Status changed successfully!'
         ]);
+    }
+    /**
+     * Display a listing of the resource.
+     */
+    public function profileEdit(Request $request)
+    {
+        return view('site.profile.edit', [
+            'user' => $request->user(),
+        ]);
+    }
+      /**
+     * Update the user's profile information.
+     */
+    public function profileUpdate(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        // Update user's profile information
+        $user->fill($request->except(['password']));
+        if ($request->user()->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        // Check if a new password has been set
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+        return Redirect::route('user.profile.edit')->with('success', value: 'Profile updated successfully.');
+
     }
 }

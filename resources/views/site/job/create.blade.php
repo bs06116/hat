@@ -10,11 +10,11 @@
       <!-- Department Selection -->
       <div class="mt-4">
     <label for="department" class="form-label">Department</label>
-    <select name="department_ids[]" id="department" class="form-control" multiple required>
+    <select name="department_ids[]" id="department" class="form-control" required>
+    <option value="">Select a Department</option>
         @foreach($departments as $department)
-            <option value="{{ $department->id }}" 
-                {{ (is_array(old('department_ids')) && in_array($department->id, old('department_ids'))) || (isset($job) && $job->departments->contains($department->id)) ? 'selected' : '' }}>
-                {{ $department->name }}
+            <option value="{{ $department->id }}">
+                              {{ $department->name }}
             </option>
         @endforeach
     </select>
@@ -22,7 +22,18 @@
         <div class="mt-2 text-danger">{{ $message }}</div>
     @enderror
 </div>
-
+<!-- Job Title -->
+      <div class="mt-4">
+          <label for="title" class="form-label">Job Title</label>
+          <select id="job_title" name="title" class="form-control" required>
+        <option value="">Select a Job Title</option>
+    </select>
+        <!-- <label for="title" class="form-label">Job Title</label>
+        <input type="text" id="title" name="title" value="{{ old('title') }}" class="form-control" required />
+        @error('title')
+          <div class="mt-2 text-danger">{{ $message }}</div>
+        @enderror -->
+      </div>
       <!-- Location Selection -->
       <div class="mt-4">
         <label for="location" class="form-label">Location</label>
@@ -39,14 +50,7 @@
         @enderror
       </div>
 
-      <!-- Job Title -->
-      <div class="mt-4">
-        <label for="title" class="form-label">Job Title</label>
-        <input type="text" id="title" name="title" value="{{ old('title') }}" class="form-control" required />
-        @error('title')
-          <div class="mt-2 text-danger">{{ $message }}</div>
-        @enderror
-      </div>
+      
 
       <!-- Start Date -->
       <div class="mt-4">
@@ -115,5 +119,27 @@
     @if (session('error'))
         toastr.error("{{ session('error') }}");
     @endif
+</script>
+<script>
+    $(document).ready(function() {
+        $('#department').change(function() {
+            var departmentId = $(this).val();
+            if (departmentId) {
+                $.ajax({
+                  url: "{{ route('get.job.title', ':id') }}".replace(':id', departmentId),
+                  type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#job_title').empty().append('<option value="">Select a Job Title</option>');
+                        $.each(data, function(key, value) {
+                            $('#job_title').append('<option value="' + key + '">' + value + '</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#job_title').empty().append('<option value="">Select a Job Title</option>');
+            }
+        });
+    });
 </script>
 @endpush

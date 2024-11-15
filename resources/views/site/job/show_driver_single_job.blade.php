@@ -9,7 +9,7 @@
 
         <div class="card mb-4">
             <div class="card-header">
-                <h3 class="card-title">{{ $job->title }}</h3>
+                <h3 class="card-title">{{ $job->job_department_title?->job_title }}</h3>
             </div>
             <div class="card-body">
                 <div class="row mb-3">

@@ -17,7 +17,7 @@ class Job extends Model
      */
     protected $table = 'driver_job';
     protected $fillable = [
-         'location_id', 'title', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'hourly_pay'
+         'location_id', 'title', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'hourly_pay', 'status'
     ];
 
     public function departments()
@@ -29,6 +29,12 @@ class Job extends Model
     public function location()
     {
         return $this->belongsTo(Location::class);
+    }
+    public function job_department_title()
+    {
+        //return $this->belongsToMany(Department::class, 'department_job', 'job_id', 'department_id');
+        return $this->belongsTo(JobTitle::class, 'title', 'id');
+
     }
     public function drivers()
     {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Job;
 use App\Models\User;
 use App\Models\JobBid;
+use App\Models\JobTitle;
 use App\Models\Department;
 use App\Models\Location;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class JobController extends Controller
         if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
             abort(code: 403);
         }
-        $jobs = Job::with(['departments', 'location'])->orderBy('id', 'desc')  // Order by latest
+        $jobs = Job::with(['departments', 'location','job_department_title'])->orderBy('id', 'desc')  // Order by latest
         ->get();
         return view('site.job.index', compact('jobs'));
     }
@@ -43,7 +44,7 @@ class JobController extends Controller
             abort(code: 403);
         }
         $request->validate([
-            'department_ids' => 'required|array', // updated for array validation
+            'department_ids' => 'required', // updated for array validation
             'location_id' => 'required',
             'title' => 'required',
             'start_date' => 'required|date',
@@ -52,7 +53,6 @@ class JobController extends Controller
             'start_time' => 'required|date_format:H:i', // Validate time format
             'end_time' => 'required|date_format:H:i',   // Validate time format
         ]);
-    
        // DB::beginTransaction();
         try {
             // First, create the Job record
@@ -66,7 +66,6 @@ class JobController extends Controller
                 'end_time' => $request->end_time,   // Validate time format
                 'description' => $request->description
             ]);
-    
             // Check if Job creation was successful
             if (!$job) {
                 throw new \Exception("Job creation failed.");
@@ -74,7 +73,7 @@ class JobController extends Controller
            
             // Log to confirm Job ID
             Log::info('Job created with ID: ' . $job->id);
-    
+          
             // Then, attach departments to the job
             $job->departments()->attach($request->department_ids);
     
@@ -187,11 +186,11 @@ class JobController extends Controller
         //     $query->where('driver_id', $driver->id); // Exclude jobs already assigned to the driver
         // })
         // ->get();
-        $availableJobs = Job::whereIn('id', function ($query) use ($driverDepartmentIds) {
+        $availableJobs = Job::with('job_department_title')->whereIn('id', function ($query) use ($driverDepartmentIds) {
             $query->select('job_id')
                   ->from('department_job')
                   ->whereIn('department_id', $driverDepartmentIds); // Filter by department IDs
-        })->whereDoesntHave('bidders') // Exclude jobs that have bids
+        }) // Exclude jobs that have bids
         ->orderBy('created_at', 'desc')  // Order by latest
         ->get();
          return view('site.job.available', compact('availableJobs'));
@@ -202,7 +201,7 @@ class JobController extends Controller
      {
          $driver = auth()->user(); // Assuming the driver is authenticated
          $driverDepartmentIds = $driver->departments->pluck('id'); // Get department IDs for the driver
-         $wonJobs = Job::whereIn('id', function ($query) use ($driverDepartmentIds) {
+         $wonJobs = Job::with('job_department_title')->whereIn('id', function ($query) use ($driverDepartmentIds) {
             $query->select('job_id')
                   ->from('department_job')
                   ->whereIn('department_id', $driverDepartmentIds); // Filter by department IDs
@@ -271,6 +270,14 @@ class JobController extends Controller
             }
 
             return redirect()->route('jobs', $job->id)->with('error', 'Failed to assign job.');
+        }
+        public function getJobTitles($id)
+        {
+            // Fetch job titles where department_id matches the selected department
+            $jobTitles = JobTitle::where('department_id', $id)->pluck('job_title', 'id');
+            
+            // Return job titles as a JSON response
+            return response()->json($jobTitles);
         }
  
 }

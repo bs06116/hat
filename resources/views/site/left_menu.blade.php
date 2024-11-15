@@ -46,6 +46,18 @@
             <i class="menu-icon tf-icons ti ti-briefcase"></i>
                 <div data-i18n="Job">Job</div>
               </a>
+            </li>  
+            <li class="menu-item {{ request()->is('invoice*') ? ' active' : '' }}">
+            <a href="{{route("invoice.index")}}" class="menu-link">
+            <i class="menu-icon tf-icons ti ti-invoice"></i>
+                <div data-i18n="Invoice">Invoice</div>
+              </a>
+            </li>  
+            <li class="menu-item {{ request()->is('user/profile*') ? ' active' : '' }}">
+            <a href="{{route("user.profile.edit")}}" class="menu-link">
+            <i class="menu-icon tf-icons ti ti-user"></i>
+                <div data-i18n="Profile">Profile</div>
+              </a>
             </li>
           </ul>
         </aside>

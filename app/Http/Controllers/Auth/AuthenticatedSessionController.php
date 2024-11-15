@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\UserStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,7 @@ class AuthenticatedSessionController extends Controller
     if ($tenantId = tenant('id')) {
         $credentials['tenant_id'] = $tenantId;
     }
+    $credentials['status'] = UserStatus::ACTIVE->value;
 
     // Attempt to authenticate the user
     if (Auth::attempt($credentials, $request->boolean('remember'))) {

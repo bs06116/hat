@@ -11,6 +11,8 @@ use App\Http\Controllers\Tenant\UserController;
 use App\Http\Controllers\Tenant\DriverController;
 use App\Http\Controllers\Tenant\LocationController;
 use App\Http\Controllers\Tenant\JobController;
+use App\Http\Controllers\Tenant\InvoiceController;
+
 use App\RolesEnum;
 
 
@@ -40,9 +42,11 @@ Route::middleware([
         Route::get('SiteDashboard', [SiteDashboard::class, 'index'])->name('site.dashboard');
     
         // Profile Routes
-        Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+         Route::get('user/profile', [UserController::class, 'profileEdit'])->name('user.profile.edit');
+         Route::patch('user/profile', [UserController::class, 'profileUpdate'])->name('user.profile.update');
+
+         // Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
+        // Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
         // User Management
         Route::resource('users', UserController::class);
@@ -63,9 +67,14 @@ Route::middleware([
       // Route to assign a job to a driver
         Route::post('/jobs/{job}/assign/{driver}', [JobController::class, 'assignJob'])->name('job.assign');
         Route::resource('jobs', JobController::class);
+        Route::get('/departments/{id}/job-titles',  [JobController::class, 'getJobTitles'])->name('get.job.title');;
 
-        // Driver Dashboardphp
+        // Driver Dashboard
         Route::get('DriverDashboard', [DriverController::class, 'dashboard'])->name('driver.dashboard');
+        // Route::get('/jobs/completed/invoice', action: [InvoiceController::class, 'index'])->name('jobs.completed.invoice');
+        Route::get('invoice', action: [InvoiceController::class, 'index'])->name('invoice.index');
+        Route::post('/invoices/toggle-approval', [InvoiceController::class, 'toggleApproval'])->name('invoices.toggleApproval');
+
     });
   
     // Route::get('/', function () {

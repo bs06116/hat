@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('site.layouts.app')
 @section('content')
 
 <div class="container-xxl flex-grow-1 container-p-y">
@@ -10,7 +10,7 @@
 
             </div>
             <div class="card-body pt-4">
-                <form id="formAccountSettings" method="POST" action="{{ route('profile.update') }}">
+                <form id="formAccountSettings" method="POST" action="{{ route('user.profile.update') }}">
                     @csrf
                     @method('patch') <!-- Use PUT method for updating the profile -->
 

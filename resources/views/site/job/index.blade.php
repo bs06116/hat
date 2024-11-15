@@ -13,7 +13,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Job Name</th>
+            <th>Job Title</th>
             <th>Location</th>
             <th>Department</th>
             <th>Hourly Pay (&pound;)</th>
@@ -26,19 +26,14 @@
             <tr>
               <td>
                 <i class="ti ti-briefcase ti-md text-primary me-4"></i>
-                <span class="fw-medium">{{ $job->title }}</span>
+                <span class="fw-medium">{{ $job->job_department_title?->job_title }}</span>
               </td>
               <td>
               {{$job->location?->name}}
-
-
-             
               </td>
-            
-
               <td>  @foreach($job->departments as $department)
                                     {{ $department->name }}@if(!$loop->last), @endif
-                                @endforeach
+                     @endforeach
               </td> 
               <td>{{ $job->hourly_pay }}</td> 
               <td>{{ $job->created_at->format('d-m-Y') }}</td> 
