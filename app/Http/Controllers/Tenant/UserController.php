@@ -25,7 +25,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
        // Fetch all tenants from the database
@@ -42,7 +42,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         return view(view: 'site.user.create');
@@ -54,7 +54,7 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     { 
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         } 
         // Create Site Manager User
@@ -74,7 +74,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
        
@@ -85,7 +85,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
               // Fetch all tenants from the database
@@ -98,7 +98,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
 
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
     // Update user details
@@ -122,7 +122,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $user->delete();
@@ -132,7 +132,7 @@ class UserController extends Controller
     }
     public function toggleStatus(Request $request)
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $user = User::findOrFail($request->user_id);

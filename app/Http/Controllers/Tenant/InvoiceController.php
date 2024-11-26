@@ -17,6 +17,10 @@ use App\JobStatus;
 use App\Models\Invoice;
 use Log;
 use Hash;
+use App\Jobs\SendInvoiceJob;
+use Barryvdh\DomPDF\Facade\Pdf;
+
+
 
 class InvoiceController extends Controller
 {
@@ -26,72 +30,60 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        if (!Auth::user() || !Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }  
           $invoices = Invoice::with('job')->get();     
         return view('site.invoice.index', compact('invoices'));
-
-        // $currentDate = Carbon::now()->toDateString();
-        // $currentTime = Carbon::now()->toTimeString();    
-        // $completedJobs = Job::where('status', '!=', JobStatus::COMPLETED->value)->whereHas('driversBids', function ($query) {
-        //         $query->where('assigned', 1);
-        //     })
-        //     ->whereDate('end_date', '<', $currentDate)
-        //     ->orWhere(function($query) use ($currentDate, $currentTime) {
-        //         $query->whereDate('end_date', '=', $currentDate)
-        //             ->whereTime('end_time', '<=', $currentTime);
-        //     }) // Assuming status column for tracking job completion
-        //     ->get();
-        //     foreach ($completedJobs as $job) {
-        //         try {
-        //             // Retrieve the driver_id from the first assigned bid, if available
-        //             $assignedBid = $job->driversBids->firstWhere('assigned', 1);
-        //             $driverId = $assignedBid ? $assignedBid->driver_id : null;
-            
-        //             // Update job status to completed
-        //             $job->update(['status' => JobStatus::COMPLETED]);
-            
-        //             // Calculate total hours and amount
-        //             $start = Carbon::parse($job->start_time);
-        //             $end = Carbon::parse($job->end_time);
-        //             $totalHours = $end->diffInHours($start);
-        //             $totalAmount = $totalHours * $job->hourly_pay;
-            
-        //             // Check if driver_id is set
-        //             if ($driverId) {
-        //                 // Create invoice entry
-        //                 Invoice::create([
-        //                     'job_id' => $job->id,
-        //                     'driver_id' => $driverId,
-        //                     'total_hours' => $totalHours,
-        //                     'total_amount' => $totalAmount,
-        //                     'is_approved' => false,
-        //                     'approved_by' => null,
-        //                 ]);
-        //             } else {
-        //                 Log::warning("Job ID {$job->id} has no driver assigned, skipping invoice creation.");
-        //             }
-        //         } catch (Exception $e) {
-        //             Log::error("Failed to process job ID {$job->id}: " . $e->getMessage());
-        //         }
-        //     }
-            
+        // $invoice = Invoice::find(1); // Retrieve the invoice
+        // $jobs = Job::where('status', JobStatus::COMPLETED->value)
+        // ->whereHas('driversBids', function ($query) use ($invoice) { // Pass $invoice using 'use'
+        //     $query->where('assigned', 1) // Filter only assigned bids
+        //           ->where('driver_id', $invoice->driver_id); // Match driver ID from the invoice
+        // })
+        // ->get();
+        // return view('email.invoice', compact('invoice','jobs'));
       
     }
     public function toggleApproval(Request $request)
     {
-        $invoice = Invoice::findOrFail($request->invoice_id);
-        // Toggle the is_approved status
-        $invoice->is_approved = !$invoice->is_approved;
-        $invoice->approved_by = $invoice->is_approved ? auth()->id() : null; // Set approved_by or remove it if unapproved
-        $invoice->save();
-    
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
+            abort(code: 403);
+        }
+        // $invoice = Invoice::findOrFail($request->invoice_id);
+        // // Toggle the is_approved status
+        // $invoice->is_approved = !$invoice->is_approved;
+        // $invoice->approved_by = $invoice->is_approved ? auth()->id() : null; // Set approved_by or remove it if unapproved
+        // $invoice->save();
+        $invoice = Invoice::find($request->invoice_id); // Retrieve the invoice
+        $jobs = Job::where('status', JobStatus::COMPLETED->value)
+        ->whereHas('driversBids', function ($query) use ($invoice) { // Pass $invoice using 'use'
+            $query->where('assigned', 1) // Filter only assigned bids
+                  ->where('driver_id', $invoice->driver_id); // Match driver ID from the invoice
+        })
+        ->get();
+        $pdf = Pdf::loadView('pdf.invoice', compact('invoice', 'jobs'));
+        // Save the PDF to a file
+        $pdfPath = storage_path("app/public/invoices/invoice_{$invoice->id}.pdf");
+        $pdf->save($pdfPath);
+        SendInvoiceJob::dispatch($invoice, $jobs);
         return response()->json([
             'success' => true,
             'is_approved' => $invoice->is_approved,
             'message' => $invoice->is_approved ? 'Invoice approved successfully.' : 'Invoice unapproved successfully.',
         ]);
     }
-    
+    public function approvedInvoice(Request $request)
+    {
+        if (!Auth::user() || !Auth::user()->hasRole(RolesEnum::SITEDRIVER->value)) {
+            abort(code: 403);
+        } 
+        $driver = auth()->user(); // Assuming the driver is authenticated
+ 
+          $invoices = Invoice::with('job')
+          ->where('driver_id', $driver->id)
+          ->where('is_approved', 1)
+          ->get();     
+         return view('site.invoice.approved_invoices', compact('invoices'));
+    }
 }

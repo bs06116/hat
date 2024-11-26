@@ -52,7 +52,7 @@
               </a>
             </li>
             <li class="menu-item ">
-            <a href="" class="menu-link">
+            <a href="{{route("invoices.dirver.approved")}}" class="menu-link">
             <i class="menu-icon tf-icons ti ti-receipt"></i>
                 <div data-i18n="Invoicing">Invoicing</div>
               </a>

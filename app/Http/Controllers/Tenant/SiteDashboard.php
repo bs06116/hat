@@ -12,7 +12,7 @@ class SiteDashboard extends Controller
 {
     public function index()
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $totalSiteUser = User::whereHas('roles', function ($query) {

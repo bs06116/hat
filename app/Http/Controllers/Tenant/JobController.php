@@ -14,13 +14,14 @@ use Illuminate\Support\Facades\DB; // Make sure to include this line
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\RolesEnum;
+use App\JobStatus;
 
 
 class JobController extends Controller
 {
     public function index()
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $jobs = Job::with(['departments', 'location','job_department_title'])->orderBy('id', 'desc')  // Order by latest
@@ -30,7 +31,7 @@ class JobController extends Controller
 
     public function create()
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $departments = Department::all();
@@ -40,7 +41,7 @@ class JobController extends Controller
 
     public function store(Request $request)
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $request->validate([
@@ -89,7 +90,7 @@ class JobController extends Controller
 
     public function show(Job $job)
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         // Check if the driver has already placed a bid on this job
@@ -121,7 +122,7 @@ class JobController extends Controller
     }
     public function edit(Job $job)
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $departments = Department::all();
@@ -131,7 +132,7 @@ class JobController extends Controller
 
     public function update(Request $request, Job $job)
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $request->validate([
@@ -149,6 +150,8 @@ class JobController extends Controller
         // Only set the time fields if they are provided, otherwise retain existing values
         $data['start_time'] = $request->start_time ?: $job->start_time;
         $data['end_time'] = $request->end_time ?: $job->end_time;
+        $data['status'] = JobStatus::INPROGRESS->value;
+
         // Update the job details
         $job->update($data); // Exclude department_ids from the update
     
@@ -160,7 +163,7 @@ class JobController extends Controller
 
     public function destroy(Job $job)
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $job->delete();

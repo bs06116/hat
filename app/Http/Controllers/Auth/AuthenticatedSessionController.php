@@ -57,7 +57,7 @@ private function redirectUser($user)
 {
     if ($user->hasRole(RolesEnum::SUPERADMIN)) {
         return redirect()->intended(route('admin.dashboard'));
-    }elseif($user->hasRole(RolesEnum::SITEMANAGER)){
+    }elseif($user->hasRole(RolesEnum::SITEMANAGER) || $user->hasRole(RolesEnum::SITEUSER)){
         return redirect()->intended(default: route('site.dashboard'));
 
     }elseif($user->hasRole(RolesEnum::SITEDRIVER)){

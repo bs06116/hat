@@ -51,7 +51,7 @@ class DriverController extends Controller
      */
     public function index()
     {
-        if (!Auth::user() || !Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
        // Fetch all tenants from the database
@@ -68,7 +68,7 @@ class DriverController extends Controller
      */
     public function create()
     {
-        if (!Auth::user() || !Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $departments = Department::all();
@@ -80,7 +80,7 @@ class DriverController extends Controller
      */
     public function store(DriverStoreRequest $request)
     {  
-        if (!Auth::user() || !Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         // Create Site Manager User
@@ -102,7 +102,7 @@ class DriverController extends Controller
      */
     public function show(User $user)
     {
-        if (!Auth::user() || !Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
        
@@ -113,7 +113,7 @@ class DriverController extends Controller
      */
     public function edit(User $driver)
     {
-        if (!Auth::user() || !Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
               // Fetch all tenants from the database
@@ -128,7 +128,7 @@ class DriverController extends Controller
      */
     public function update(DriverUpdateRequest $request, User $driver)
     {
-        if (!Auth::user() || !Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
     // Update user details
@@ -153,7 +153,7 @@ class DriverController extends Controller
      */
     public function destroy(User $user)
     {
-        if (!Auth::user() || !Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $user->delete();
@@ -163,7 +163,7 @@ class DriverController extends Controller
     }
     public function toggleStatus(Request $request)
     {
-        if (!Auth::user() || !Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $user = User::findOrFail($request->driver_id);

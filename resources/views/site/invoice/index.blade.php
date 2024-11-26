@@ -4,16 +4,15 @@
 <div class="container-xxl flex-grow-1 container-p-y">
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-      <h5 class="mb-0">All Sites Admin</h5>
-      <a href="{{ route('users.create') }}" class="btn btn-primary">
+      <h5 class="mb-0">Invoices</h5>
+      <!-- <a href="{{ route('users.create') }}" class="btn btn-primary">
         <i class="ti ti-plus me-1"></i> Add New Site Admin
-      </a>
+      </a> -->
     </div>
     <div class="table-responsive text-nowrap">
       <table class="table">
         <thead>
           <tr>
-            <th>Job Title</th>
             <th>Driver</th>
             <th>Total Hours</th>
             <th>Total Amount</th>
@@ -24,10 +23,7 @@
         <tbody class="table-border-bottom-0">
           @forelse ($invoices as $invoice)
             <tr>
-              <td>
-                <i class="ti ti-building ti-md text-primary me-4"></i>
-                <span class="fw-medium">{{ $invoice->job->job_department_title?->job_title}}</span>
-              </td>
+            
               <td>
                 {{ $invoice->user->first_name . ' ' . $invoice->user->last_name }}
               </td>

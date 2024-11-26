@@ -27,7 +27,9 @@ use App\RolesEnum;
 | Feel free to customize them however you want. Good luck!
 |
 */
-
+Route::get('/', function () {
+    return redirect(env('APP_URL'));
+})->name('login');
 Route::middleware([
     'web',
     InitializeTenancyByDomain::class,
@@ -74,6 +76,7 @@ Route::middleware([
         // Route::get('/jobs/completed/invoice', action: [InvoiceController::class, 'index'])->name('jobs.completed.invoice');
         Route::get('invoice', action: [InvoiceController::class, 'index'])->name('invoice.index');
         Route::post('/invoices/toggle-approval', [InvoiceController::class, 'toggleApproval'])->name('invoices.toggleApproval');
+        Route::get('/invoices/driver/approved', [InvoiceController::class, 'approvedInvoice'])->name('invoices.dirver.approved');
 
     });
   

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('job_id')->references('id')->on('jobs')->onDelete(action: 'cascade');
+            $table->unsignedBigInteger('job_id')->nullable()->references('id')->on('jobs')->onDelete(action: 'cascade');
             $table->unsignedBigInteger('driver_id')->nullable()->references('id')->on('users'); // Optional if not all jobs have drivers
             $table->decimal('total_hours', 5, 2);
             $table->decimal('total_amount', 10, 2);

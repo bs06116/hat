@@ -22,7 +22,7 @@ class LocationController extends Controller
 {
     public function index()
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $locations = Location::orderBy( 'created_at', 'desc')->get();
@@ -31,7 +31,7 @@ class LocationController extends Controller
 
     public function create()
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         return view('site.location.create');
@@ -39,7 +39,7 @@ class LocationController extends Controller
 
     public function store(LocationStoreRequest $request)
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         Location::create($request->all());
@@ -48,7 +48,7 @@ class LocationController extends Controller
 
     public function edit(Location $location)
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         return view('site.location.edit', compact('location'));
@@ -56,7 +56,7 @@ class LocationController extends Controller
 
     public function update(Request $request, Location $location)
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $location->update($request->all());
@@ -66,7 +66,7 @@ class LocationController extends Controller
 
     public function destroy(Location $location)
     {
-        if (!Auth::user()->hasRole(RolesEnum::SITEMANAGER->value)) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $location->delete();
