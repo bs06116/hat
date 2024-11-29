@@ -77,6 +77,7 @@ Route::middleware([
         Route::get('invoice', action: [InvoiceController::class, 'index'])->name('invoice.index');
         Route::post('/invoices/toggle-approval', [InvoiceController::class, 'toggleApproval'])->name('invoices.toggleApproval');
         Route::get('/invoices/driver/approved', [InvoiceController::class, 'approvedInvoice'])->name('invoices.dirver.approved');
+        Route::get('/invoices/generate/{id}', [InvoiceController::class, 'downloadPdf'])->name('site.invoice.pdf');
 
     });
   

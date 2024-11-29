@@ -12,7 +12,7 @@ class Invoice extends Model
     use HasFactory;
     protected $table = 'invoices'; // Ensure this matches your actual table name
     protected $fillable = [
-        'job_id', 'driver_id', 'total_hours', 'total_amount', 'is_approved', 'approved_by'
+        'job_id', 'driver_id', 'total_hours', 'total_amount','total_job', 'is_approved', 'approved_by'
    ];
    public function job()
    {

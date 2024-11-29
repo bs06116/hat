@@ -11,7 +11,7 @@
     <p>Total Amount: ${{ number_format($invoice->total_amount, 2) }}</p>
 
     <h3>Job Details:</h3>
-    <table border="1" cellpadding="5">
+    <table  cellpadding="5">
         <thead>
             <tr>
                 <th>Job ID</th>
@@ -28,7 +28,7 @@
                 <td>{{ $job->start_time }}</td>
                 <td>{{ $job->end_time }}</td>
                 <td>{{ $job->total_minutes }}</td>
-                <td>${{ number_format($job->total_amount, 2) }}</td>
+                <td>&#163;{{ number_format($job->total_amount, 2) }}</td>
             </tr>
             @endforeach
         </tbody>
