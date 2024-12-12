@@ -20,7 +20,8 @@ use Hash;
 use App\Jobs\SendInvoiceJob;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\UserNotification;
+use Illuminate\Database\Eloquent\Collection;
 
 
 class InvoiceController extends Controller
@@ -34,7 +35,9 @@ class InvoiceController extends Controller
         if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         } 
-        $invoices = Invoice::with('job')->get();     
+        $invoices = Invoice::select(Invoice::raw('invoices.*, users.first_name, users.last_name'))->join('users', 'invoices.driver_id', '=', 'users.id')
+        ->where('tenant_id',tenant('id'))->orderBy('invoices.id','desc')
+        ->get();
         return view('site.invoice.index', compact('invoices'));
         // $invoice = Invoice::find(1); // Retrieve the invoice
         // $jobs = Job::where('status', JobStatus::COMPLETED->value)
@@ -63,11 +66,18 @@ class InvoiceController extends Controller
                   ->where('driver_id', $invoice->driver_id); // Match driver ID from the invoice
         })
         ->get();
+        $tenantDir = storage_path("tenant".tenant('id'));
+        if (!is_dir($tenantDir)) {
+            mkdir($tenantDir, 0755, true);
+        }
         $pdf = Pdf::loadView('pdf.invoice', compact('invoice', 'jobs'));
         // Save the PDF to a file
-        $pdfPath = storage_path(path: "invoice_{$invoice->id}.pdf");
+        $pdfPath = storage_path( "invoice_{$invoice->id}.pdf");
         $pdf->save($pdfPath);
-       // SendInvoiceJob::dispatch($invoice, $jobs);
+        // Send notification if needed
+
+        $this->sendInvoiceNotification($invoice->first(), $jobs);
+
         return response()->json([
             'success' => true,
             'is_approved' => $invoice->is_approved,
@@ -83,6 +93,7 @@ class InvoiceController extends Controller
           $invoices = Invoice::with('job')
           ->where('driver_id', $driver->id)
           ->where('is_approved', 1)
+          ->orderBy('id','desc')
           ->get();     
          return view('site.invoice.approved_invoices', compact('invoices'));
     }
@@ -92,7 +103,19 @@ class InvoiceController extends Controller
         if (!file_exists($filePath)) {
             abort(404, 'File not found.');
         }
-
         return response()->download($filePath);
+    }
+    /**
+     * Helper method to send invoice notification
+     */
+    private function sendInvoiceNotification(Invoice $invoice, Collection $jobs): void
+    {
+        $hasNotification = UserNotification::where('user_id', $invoice->driver_id)
+            ->where('notification_type', 'invoice')
+            ->exists();
+
+        if ($hasNotification) {
+            SendInvoiceJob::dispatch($invoice, $jobs);
+        }
     }
 }

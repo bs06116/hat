@@ -26,18 +26,18 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <p><strong>Start Date:</strong> </p>
+                        <p><strong>Start Date:</strong>{{ $job->start_date->format('d-m-Y') }} </p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>End Date:</strong> </p>
+                        <p><strong>End Date:</strong>{{ $job->end_date->format('d-m-Y') }} </p>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <p><strong>Shift Start Time:</strong> </p>
+                        <p><strong>Shift Start Time:</strong> {{ $job->start_time}}</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Shift End Time:</strong> </p>
+                        <p><strong>Shift End Time:</strong> {{ $job->end_time}}</p>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -54,7 +54,7 @@
                     @if($isAssignedToMe)
                         <p class="text-success">You have won this job.</p>
                     @else
-                        <p class="text-danger">This job is already won to another driver.</p>
+                        <!-- <p class="text-danger">This job is already won to another driver.</p> -->
                     @endif
                     
 
@@ -62,7 +62,7 @@
  <!-- Job Bid Message -->
  @if(!$assignedBid && !$isAssignedToMe)
                 @if($hasBid)
-                    <p class="text-warning">You have already bid for this job.</p>
+                    <!-- <p class="text-warning">You have already bid for this job.</p> -->
                 @else
                     <form action="{{ route('jobs.submitBid', $job) }}" method="POST">
                         @csrf

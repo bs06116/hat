@@ -30,7 +30,7 @@ class WeeklyInvoice extends Command
      */
     public function handle()
     {
-        $this->info('Generating weekly invoices...');
+        Log::info('Generating weekly invoices...');
 
         $currentDate = Carbon::now()->toDateString();
         $currentTime = Carbon::now()->toTimeString();
@@ -42,7 +42,7 @@ class WeeklyInvoice extends Command
                 $query->where('assigned', 1); // Filter only assigned bids
             })
             ->where(function ($query) use ($currentDate, $currentTime) {
-                $query->whereDate('end_date', '<', $currentDate) // End date is before today
+                $query->whereDate('end_date', '<=', $currentDate) // End date is before today
                     ->orWhere(function ($query) use ($currentDate, $currentTime) {
                         $query->whereDate('end_date', '=', $currentDate) // End date is today
                             ->whereTime('end_time', '<=', $currentTime); // End time is past
@@ -65,10 +65,33 @@ class WeeklyInvoice extends Command
                 $totalHours = 0;
                 $totalAmount = 0;
                 foreach ($jobs as $job) {
-                   // Parse start and end times
-                    $job->update(['status' => JobStatus::COMPLETED->value]);
-                    $start = Carbon::parse($job->start_date . ' ' . $job->start_time);
-                    $end = Carbon::parse($job->end_date . ' ' . $job->end_time);
+                    // Ensure the start date is in a valid format
+                    $startDate = Carbon::parse($job->start_date);
+                    $startTime = $job->start_time;
+                    $startDateTime = $startDate->toDateString(); // Ensure it’s in the correct 'YYYY-MM-DD' format
+
+                    // Only append start_time if it's not '00:00:00'
+                    if ($startTime && $startTime !== '00:00:00') {
+                        $startDateTime .= ' ' . $startTime;
+                    }
+
+                    // Ensure the end date is in a valid format
+                    $endDate = Carbon::parse($job->end_date);
+                    $endTime = $job->end_time;
+                    $endDateTime = $endDate->toDateString(); // Ensure it’s in the correct 'YYYY-MM-DD' format
+
+                    // Only append end_time if it's not '00:00:00'
+                    if ($endTime && $endTime !== '00:00:00') {
+                        $endDateTime .= ' ' . $endTime;
+                    }
+                        // Log the concatenated date-time strings for debugging
+                    Log::info("Start DateTime: " . $startDateTime);
+                    Log::info("End DateTime: " . $endDateTime);
+                  
+                    $start = Carbon::parse($startDateTime);
+                    $end = Carbon::parse($endDateTime);
+                     // Log to check the combined strings before parsing
+      
                     // Calculate total hours
                     $jobHours = $start->diffInMinutes($end) / 60;
                     $totalHours += $jobHours;
@@ -76,6 +99,7 @@ class WeeklyInvoice extends Command
                     $hourlyPay = floatval($job->hourly_pay);
                     // Calculate total amount
                     $totalAmount += $jobHours * $hourlyPay;
+                    $job->update(['status' => JobStatus::COMPLETED->value]);
                 }
                  $jobCount = $jobs->count();
                 // Create a single invoice for the driver
@@ -90,7 +114,7 @@ class WeeklyInvoice extends Command
 
                 //$this->info("Invoice created for driver ID {$driverId} with {$jobCount} jobs and {$totalHours} hours.");
             } catch (\Exception $e) {
-                Log::error("Error generating invoice for driver ID {$driverId}: " . $e->getMessage());
+                Log::error("Error processing job ID {$job->id}: " . $e->getMessage());
             }
         }
 

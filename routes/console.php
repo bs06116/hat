@@ -13,5 +13,6 @@ Artisan::command('inspire', function () {
 // Schedule the command to run
 // Schedule::command('completed:jobs')->everyMinute();
 Schedule::command('weekly:invoice')->everyMinute();
+Schedule::command('queue:work --stop-when-empty')->everyMinute();
 
 

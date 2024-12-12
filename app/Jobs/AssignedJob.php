@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\InvoiceMail;
+use App\Mail\AssignedJobMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -10,22 +10,22 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class SendInvoiceJob implements ShouldQueue
+class AssignedJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $invoice;
-    public $jobs;
+    public $job;
+    public $driver;
 
     /**
      * Create a new job instance.
      *
-     * @param $invoice
+     * @param $job
      */
-    public function __construct($invoice, $jobs)
+    public function __construct($job, $driver)
     {
-        $this->invoice = $invoice;
-        $this->jobs = $jobs;
+        $this->job = $job;
+        $this->driver = $driver;
     }
 
     /**
@@ -36,6 +36,6 @@ class SendInvoiceJob implements ShouldQueue
     public function handle()
     {
         //Mail::to($this->invoice->driver->email)->send(new InvoiceMail($this->invoice, $this->jobs));
-         Mail::to($this->invoice->user->email)->send(new InvoiceMail($this->invoice, $this->jobs));
+         Mail::to($this->driver->email)->send(new AssignedJobMail($this->job, $this->driver));
     }
 }

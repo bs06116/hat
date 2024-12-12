@@ -125,15 +125,15 @@ class TenantController extends Controller
             abort(code: 403);
         }
         $user = User::findOrFail($request->user_id);
-    
-        // Toggle status
-        if ($user->status === UserStatus::ACTIVE->value) {
-            $user->status = UserStatus::DEACTIVE->value;
+            // Toggle status
+        if ($user->status === UserStatus::ACTIVE) {
+            $user->status = UserStatus::DEACTIVE;
         } else {
-            $user->status = UserStatus::ACTIVE->value;
+            $user->status = UserStatus::ACTIVE;
         }
-    
+        // Save the user
         $user->save();
+    
     
         return response()->json([
             'success' => true,

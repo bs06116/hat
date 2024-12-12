@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class InvoiceMail extends Mailable
+class AssignedJobMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -32,8 +32,8 @@ class InvoiceMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Your Invoice from HATS')
-            ->view('email.invoice', ['invoice' => $this->invoice,'jobs' => $this->jobs]) // Email template
+        return $this->subject('Job Won from HATS')
+            ->view('email.assigned_job', ['invoice' => $this->invoice,'jobs' => $this->jobs]) // Email template
             ->attach(storage_path( "invoice_{$this->invoice->id}.pdf")) // Attach PDF
             ->with([
                 'invoice' => $this->invoice,

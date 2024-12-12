@@ -26,10 +26,10 @@
         </div>
         <div class="row mb-3">
           <div class="col-md-6">
-            <p><strong>Start Date:</strong> {{ $job->start_date }} </p>
+            <p><strong>Start Date:</strong> {{ $job->start_date->format('d-m-Y') }} </p>
           </div>
           <div class="col-md-6">
-            <p><strong>End Date:</strong> {{ $job->end_date }}</p>
+            <p><strong>End Date:</strong> {{ $job->end_date->format('d-m-Y')  }}</p>
           </div>
         </div>
         <div class="row mb-3">

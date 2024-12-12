@@ -25,7 +25,8 @@ class LocationController extends Controller
         if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
-        $locations = Location::orderBy( 'created_at', 'desc')->get();
+        $tenantId = tenant('id');
+        $locations = Location::where('tenant_id', $tenantId)->orderBy( 'created_at', 'desc')->get();
         return view('site.location.index', compact('locations'));
     }
 

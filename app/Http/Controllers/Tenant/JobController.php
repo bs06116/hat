@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\AssignedJob;
 use App\Models\Job;
 use App\Models\User;
 use App\Models\JobBid;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\RolesEnum;
 use App\JobStatus;
+use App\Models\UserNotification;
 
 
 class JobController extends Controller
@@ -24,7 +26,7 @@ class JobController extends Controller
         if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
-        $jobs = Job::with(['departments', 'location','job_department_title'])->orderBy('id', 'desc')  // Order by latest
+        $jobs = Job::where('tenant_id', tenant('id'))->with(['departments', 'location','job_department_title'])->orderBy('id', 'desc')  // Order by latest
         ->get();
         return view('site.job.index', compact('jobs'));
     }
@@ -35,7 +37,7 @@ class JobController extends Controller
             abort(code: 403);
         }
         $departments = Department::all();
-        $locations = Location::all();
+        $locations = Location::where('tenant_id', tenant('id'))->get();
         return view('site.job.create', compact('departments', 'locations'));
     }
 
@@ -189,7 +191,7 @@ class JobController extends Controller
         //     $query->where('driver_id', $driver->id); // Exclude jobs already assigned to the driver
         // })
         // ->get();
-        $availableJobs = Job::with('job_department_title')->whereIn('id', function ($query) use ($driverDepartmentIds) {
+        $availableJobs = Job::with('job_department_title')->where('tenant_id',tenant('id'))->whereIn('id', function ($query) use ($driverDepartmentIds) {
             $query->select('job_id')
                   ->from('department_job')
                   ->whereIn('department_id', $driverDepartmentIds); // Filter by department IDs
@@ -240,27 +242,24 @@ class JobController extends Controller
             if ($job->driversBids()->where('driver_id', $driver->id)->exists()) {
                 return redirect()->route('jobs.showAavailableJob', $job)->with('error', 'You have already bid for this job.');
             }
-        // Create a new bid for this job by the driver
-        $jobBid = new JobBid();
-        $jobBid->job_id = $job->id; // Assign job id
-        $jobBid->driver_id = $driver->id; // Assign driver id
-        $jobBid->save(); // Save the bid
+            // Create a new bid for this job by the driver
+            $jobBid = new JobBid();
+            $jobBid->job_id = $job->id; // Assign job id
+            $jobBid->driver_id = $driver->id; // Assign driver id
+            $jobBid->save(); // Save the bid
 
             return redirect()->route('jobs.showAavailableJob', $job)->with('success', 'Bid submitted successfully!');
         }
         public function assignJob(Request $request, Job $job, $driverId)
         {
             $driver = User::findOrFail($driverId);
-
             // Check if the job already has an assigned driver
             $currentJobBid = JobBid::where('job_id', $job->id)->where('assigned', 1)->first();
-
             // If a driver is currently assigned, unassign them
             if ($currentJobBid) {
                 $currentJobBid->assigned = 0; // Mark the current driver as unassigned
                 $currentJobBid->save();
             }
-
             // Now assign the job to the new driver
             $jobBid = JobBid::where('job_id', $job->id)->where('driver_id', $driver->id)->first();
             
@@ -268,7 +267,12 @@ class JobController extends Controller
                 $jobBid->assigned = 1; // Mark the new driver as assigned
                 $jobBid->bid_date = now();
                 $jobBid->save();
-
+                $hasNotification = UserNotification::where('user_id', $driver->id)
+                                ->where('notification_type', 'job_won')
+                                ->exists();
+            if($hasNotification){
+                AssignedJob::dispatch($job, $driver);
+            }
                 return redirect()->route('jobs.index')->with('success', 'Job assigned successfully!');
             }
 
@@ -278,7 +282,6 @@ class JobController extends Controller
         {
             // Fetch job titles where department_id matches the selected department
             $jobTitles = JobTitle::where('department_id', $id)->pluck('job_title', 'id');
-            
             // Return job titles as a JSON response
             return response()->json($jobTitles);
         }

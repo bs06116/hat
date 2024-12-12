@@ -14,7 +14,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>HATS - Login</title>
+      <title>{{ config('app.name', 'HATS') }}</title>
 
     <meta name="description" content="" />
 

@@ -13,9 +13,9 @@
            <th>Job Title</th>
             <th>Department</th>
             <th>Base Location</th>
-            <th>Shift Time</th>
+            <th>Shift Start Date</th>
             <th>Hourly Pay (&pound;)</th>
-            <th>Status</th>
+            <!-- <th>Status</th> -->
             <th>Action</th>
 
           </tr>
@@ -30,9 +30,9 @@
                         @endforeach
               </td>
               <td>{{ $job->location->name }}</td>
-              <td>{{ $job->start_time }} - {{ $job->end_time }}</td>
+              <td>{{ $job->start_date->format('d-m-Y') }}</td>
               <td>£{{ $job->hourly_pay }}</td>
-              <td></td>
+              <!-- <td></td> -->
               <td><a href="{{ route('jobs.showAavailableJob', ['job' => $job->id]) }}" class="btn btn-primary">
                   <i class="ti ti-view me-2"></i> View
                 </a></td>

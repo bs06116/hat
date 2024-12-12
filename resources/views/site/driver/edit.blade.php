@@ -1,28 +1,33 @@
 @extends('site.layouts.app')
+
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
   <div class="card mb-6">
-    <h5 class="card-header">Edit User</h5>
+    <h5 class="card-header">Edit Driver</h5>
     <form method="POST" action="{{ route('drivers.update', $driver->id) }}" class="card-body">
       @csrf
       @method('PUT')
 
-      <!-- First Name -->
-      <div class="mt-4">
-        <label for="first_name" class="form-label">First Name</label>
-        <input type="text" id="first_name" name="first_name" value="{{ old('first_name', $driver->first_name) }}" class="form-control" required autofocus />
-        @error('first_name')
-          <div class="mt-2 text-danger">{{ $message }}</div>
-        @enderror
-      </div>
-
-      <!-- Last Name -->
-      <div class="mt-4">
-        <label for="last_name" class="form-label">Last Name</label>
-        <input type="text" id="last_name" name="last_name" value="{{ old('last_name', $driver->last_name) }}" class="form-control" required />
-        @error('last_name')
-          <div class="mt-2 text-danger">{{ $message }}</div>
-        @enderror
+      <!-- First Name and Last Name in one row -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mt-4">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" id="first_name" name="first_name" value="{{ old('first_name', $driver->first_name) }}" class="form-control" required autofocus />
+            @error('first_name')
+              <div class="mt-2 text-danger">{{ $message }}</div>
+            @enderror
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mt-4">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" id="last_name" name="last_name" value="{{ old('last_name', $driver->last_name) }}" class="form-control" required />
+            @error('last_name')
+              <div class="mt-2 text-danger">{{ $message }}</div>
+            @enderror
+          </div>
+        </div>
       </div>
 
       <!-- Email -->
@@ -36,7 +41,7 @@
 
       <!-- Password (optional) -->
       <div class="mt-4">
-        <label for="password" class="form-label">Password</label>
+        <label for="password" class="form-label">Password (Leave blank to keep the current password)</label>
         <input type="password" id="password" name="password" class="form-control" autocomplete="new-password" />
         @error('password')
           <div class="mt-2 text-danger">{{ $message }}</div>
@@ -52,32 +57,33 @@
         @enderror
       </div>
 
-     
       <!-- Departments (multi-select) -->
       <div class="mt-4">
-          <label for="departments" class="form-label">Departments</label>
-          @foreach($departments as $department)
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="department_{{ $department->id }}" 
-                       name="departments[]" value="{{ $department->id }}"
-                       {{ $driver->departments->contains($department->id) ? 'checked' : '' }}>
-                <label class="form-check-label" for="department_{{ $department->id }}">
-                    {{ $department->name }}
-                </label>
-            </div>
+        <label for="departments" class="form-label">Departments</label>
+        @foreach($departments as $department)
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="department_{{ $department->id }}" 
+                   name="departments[]" value="{{ $department->id }}"
+                   {{ $driver->departments->contains($department->id) ? 'checked' : '' }}>
+            <label class="form-check-label" for="department_{{ $department->id }}">
+              {{ $department->name }}
+            </label>
+          </div>
         @endforeach
-          @error('departments')
-              <div class="mt-2 text-danger">{{ $message }}</div>
-          @enderror
+        @error('departments')
+          <div class="mt-2 text-danger">{{ $message }}</div>
+        @enderror
       </div>
- <!-- Submit and Cancel -->
- <div class="pt-4">
+
+      <!-- Submit and Cancel -->
+      <div class="pt-4">
         <button type="submit" class="btn btn-primary me-4">Update</button>
         <a href="{{ route('drivers.index') }}" class="btn btn-secondary">Cancel</a>
       </div>
     </form>
   </div>
 </div>
+
 @endsection
 
 @push('scripts')

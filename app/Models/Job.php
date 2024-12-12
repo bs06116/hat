@@ -17,7 +17,11 @@ class Job extends Model
      */
     protected $table = 'driver_job';
     protected $fillable = [
-         'location_id', 'title', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'hourly_pay', 'status'
+         'location_id', 'title', 'start_date', 'end_date', 'start_time', 'end_time', 'description','tenant_id','user_id', 'hourly_pay', 'status'
+    ];
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime'
     ];
 
     public function departments()
@@ -53,6 +57,14 @@ class Job extends Model
     {
         return $this->hasMany(JobBid::class, 'job_id'); // Replace 'job_id' if it uses a different foreign key
     }
+     // Automatically set tenant_id and user_id when creating a location
+     protected static function booted()
+     {
+         static::creating(function ($location) {
+             $location->tenant_id = tenant('id'); // Assign tenant ID
+             $location->user_id = auth()->id();  // Assign logged-in user ID
+         });
+     }
     // public function drivers()
     // {
     //     return $this->belongsToMany(User::class, 'driver_assign_job');

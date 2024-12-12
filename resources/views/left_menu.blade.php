@@ -18,7 +18,7 @@
             <li class="menu-item {{ request()->is('AdminDashboard*') ? ' active' : '' }}">
             <a href="{{route(name: "admin.dashboard")}}" class="menu-link">
             <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div data-i18n="Dashboard">Dashboard</div>
+                <div data-i18n="Dashboard">Home</div>
               </a>
               </li>
 

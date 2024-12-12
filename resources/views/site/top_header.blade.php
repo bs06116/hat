@@ -56,7 +56,7 @@
                 <!-- Quick links -->
 
                 <!-- Notification -->
-                <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+                <!-- <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
                   <a
                     class="nav-link btn btn-text-secondary btn-icon rounded-pill dropdown-toggle hide-arrow"
                     href="javascript:void(0);"
@@ -305,7 +305,7 @@
                       </div>
                     </li>
                   </ul>
-                </li>
+                </li> -->
                 <!--/ Notification -->
 
                 <!-- User -->

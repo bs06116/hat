@@ -30,13 +30,13 @@ class DriverController extends Controller
         $driver = auth()->user(); // Assuming the driver is authenticated
          $driverDepartmentIds = $driver->departments->pluck('id'); // Get department IDs for the driver
        // Fetch all tenants from the database
-       $totalAvailableJobs = Job::whereIn('id', function ($query) use ($driverDepartmentIds) {
+       $totalAvailableJobs = Job::where('tenant_id',tenant('id'))->whereIn('id', function ($query) use ($driverDepartmentIds) {
         $query->select('job_id')
               ->from('department_job')
               ->whereIn('department_id', $driverDepartmentIds); // Filter by department IDs
         })->whereDoesntHave('bidders')
         ->count();
-        $totalWonJobs = Job::whereIn('id', function ($query) use ($driverDepartmentIds) {
+        $totalWonJobs = Job::where('tenant_id',tenant('id'))->whereIn('id', function ($query) use ($driverDepartmentIds) {
            $query->select('job_id')
                  ->from('department_job')
                  ->whereIn('department_id', $driverDepartmentIds); // Filter by department IDs

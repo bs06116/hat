@@ -18,7 +18,7 @@
             <li class="menu-item {{ request()->is('DriverDashboard*') ? ' active' : '' }}">
             <a href="{{route(name: "driver.dashboard")}}" class="menu-link">
             <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div data-i18n="Dashboard">Dashboard</div>
+                <div data-i18n="Home">Home</div>
               </a>
             </li>
             
@@ -46,7 +46,7 @@
                     </ul>
             </li>
             <li class="menu-item ">
-            <a href="" class="menu-link">
+            <a href="{{route("notifications.index")}}" class="menu-link">
             <i class="menu-icon tf-icons ti ti-bell"></i>
                 <div data-i18n="Notifications">Notifications</div>
               </a>
@@ -57,12 +57,12 @@
                 <div data-i18n="Invoicing">Invoicing</div>
               </a>
             </li>
-            <li class="menu-item {{ request()->is('user/profile*') ? ' active' : '' }}">
+            <!-- <li class="menu-item {{ request()->is('user/profile*') ? ' active' : '' }}">
             <a href="{{route("user.profile.edit")}}" class="menu-link">
             <i class="menu-icon tf-icons ti ti-user"></i>
                 <div data-i18n="Profile">Profile</div>
               </a>
-            </li>
+            </li> -->
            
           </ul>
         </aside>

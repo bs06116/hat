@@ -7,35 +7,40 @@
     <form method="POST" action="{{ route('jobs.store') }}" class="card-body">
       @csrf
 
+      <div class="row">
+
       <!-- Department Selection -->
-      <div class="mt-4">
-    <label for="department" class="form-label">Department</label>
-    <select name="department_ids[]" id="department" class="form-control" required>
-    <option value="">Select a Department</option>
-        @foreach($departments as $department)
+      <div class="col-md-6 mt-4">
+      <label for="department" class="form-label">Department</label>
+        <select name="department_ids[]" id="department" class="form-control" required>
+          <option value="">Select a Department</option>
+          @foreach($departments as $department)
             <option value="{{ $department->id }}">
-                              {{ $department->name }}
+              {{ $department->name }}
             </option>
-        @endforeach
-    </select>
-    @error('department_ids')
-        <div class="mt-2 text-danger">{{ $message }}</div>
-    @enderror
-</div>
-<!-- Job Title -->
-      <div class="mt-4">
-          <label for="title" class="form-label">Job Title</label>
-          <select id="job_title" name="title" class="form-control" required>
-        <option value="">Select a Job Title</option>
-    </select>
-        <!-- <label for="title" class="form-label">Job Title</label>
-        <input type="text" id="title" name="title" value="{{ old('title') }}" class="form-control" required />
+          @endforeach
+        </select>
+        @error('department_ids')
+          <div class="mt-2 text-danger">{{ $message }}</div>
+        @enderror
+      </div>
+
+      <!-- Job Title -->
+      <div class="col-md-6 mt-4">
+      <label for="job_title" class="form-label">Job Title</label>
+        <select id="job_title" name="title" class="form-control" required>
+          <option value="">Select a Job Title</option>
+        </select>
         @error('title')
           <div class="mt-2 text-danger">{{ $message }}</div>
-        @enderror -->
+        @enderror
       </div>
+      </div>
+
       <!-- Location Selection -->
-      <div class="mt-4">
+      <div class="row">
+
+      <div class="col-md-6 mt-4">
         <label for="location" class="form-label">Location</label>
         <select name="location_id" id="location" class="form-control" required>
           <option value="">Select a Location</option>
@@ -50,55 +55,64 @@
         @enderror
       </div>
 
-      
-
-      <!-- Start Date -->
-      <div class="mt-4">
-        <label for="start_date" class="form-label">Start Date</label>
-        <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}" class="form-control" required />
-        @error('start_date')
-          <div class="mt-2 text-danger">{{ $message }}</div>
-        @enderror
-      </div>
-
-      <!-- End Date -->
-      <div class="mt-4">
-        <label for="end_date" class="form-label">End Date</label>
-        <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}" class="form-control" required />
-        @error('end_date')
-          <div class="mt-2 text-danger">{{ $message }}</div>
-        @enderror
-      </div>
-      <div class="mt-4">
-
-    <label for="start_time">Start Time</label>
-    <input type="time" id="start_time" name="start_time" class="form-control" required>
-    @error('end_date')
-          <div class="mt-2 text-danger">{{ $message }}</div>
-        @enderror
-</div>
-
-<div class="mt-4">
-<label for="end_time">End Time</label>
-    <input type="time" id="end_time" name="end_time" class="form-control" required>
-</div>
-
-      <!-- Hourly Pay -->
-      <div class="mt-4">
-        <label for="hourly_pay" class="form-label">Hourly Pay (&pound;)</label>
+       <!-- Hourly Pay -->
+       <div class="col-md-6 mt-4">
+       <label for="hourly_pay" class="form-label">Hourly Pay (&pound;)</label>
         <input type="number" id="hourly_pay" name="hourly_pay" value="{{ old('hourly_pay') }}" class="form-control" step="0.01" required />
         @error('hourly_pay')
           <div class="mt-2 text-danger">{{ $message }}</div>
         @enderror
       </div>
-<!-- Job Description -->
-<div class="mt-4">
-    <label for="description" class="form-label">Job Description</label>
-    <textarea id="description" name="description" class="form-control" rows="4">{{ old('description') }}</textarea>
-    @error('description')
-        <div class="mt-2 text-danger">{{ $message }}</div>
-    @enderror
-</div>
+
+      </div>
+
+      <!-- Start Date and End Date (in one row) -->
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <label for="start_date" class="form-label">Start Date</label>
+          <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}" class="form-control" required />
+          @error('start_date')
+            <div class="mt-2 text-danger">{{ $message }}</div>
+          @enderror
+        </div>
+        <div class="col-md-6">
+          <label for="end_date" class="form-label">End Date</label>
+          <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}" class="form-control" required />
+          @error('end_date')
+            <div class="mt-2 text-danger">{{ $message }}</div>
+          @enderror
+        </div>
+      </div>
+
+      <!-- Start Time and End Time (in one row) -->
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <label for="start_time" class="form-label">Start Time</label>
+          <input type="time" id="start_time" name="start_time" class="form-control" required />
+          @error('start_time')
+            <div class="mt-2 text-danger">{{ $message }}</div>
+          @enderror
+        </div>
+        <div class="col-md-6">
+          <label for="end_time" class="form-label">End Time</label>
+          <input type="time" id="end_time" name="end_time" class="form-control" required />
+          @error('end_time')
+            <div class="mt-2 text-danger">{{ $message }}</div>
+          @enderror
+        </div>
+      </div>
+
+     
+
+      <!-- Job Description -->
+      <div class="mt-4">
+        <label for="description" class="form-label">Job Description</label>
+        <textarea id="description" name="description" class="form-control" rows="4">{{ old('description') }}</textarea>
+        @error('description')
+          <div class="mt-2 text-danger">{{ $message }}</div>
+        @enderror
+      </div>
+
       <!-- Submit and Cancel -->
       <div class="pt-4">
         <button type="submit" class="btn btn-primary me-4">Submit</button>
@@ -107,7 +121,6 @@
     </form>
   </div>
 </div>
-
 @endsection
 
 @push('scripts')

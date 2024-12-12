@@ -67,7 +67,7 @@
 <body>
     <div class="email-container">
         <div class="email-header">
-            <h1>Invoice Attached</h1>
+            <h1>Job Attached</h1>
         </div>
         <div class="email-body">
             <!-- <p>Dear <span class="highlight">[Customer Name]</span>,</p> -->

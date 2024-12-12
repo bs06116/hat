@@ -12,6 +12,7 @@ use App\Http\Controllers\Tenant\DriverController;
 use App\Http\Controllers\Tenant\LocationController;
 use App\Http\Controllers\Tenant\JobController;
 use App\Http\Controllers\Tenant\InvoiceController;
+use App\Http\Controllers\Tenant\NotificationController;
 
 use App\RolesEnum;
 
@@ -27,9 +28,24 @@ use App\RolesEnum;
 | Feel free to customize them however you want. Good luck!
 |
 */
-Route::get('/', function () {
-    return redirect(env('APP_URL'));
-})->name('login');
+Route::get('/cache', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('optimize:clear'); // this will do the command line job
+//   Artisan::call('route:cache');
+//   Artisan::call('route:clear');
+  Artisan::call('view:clear');
+//   Artisan::call('config:cache');
+    return '<h1>Routes cached</h1>';
+
+    return true;
+});
+Route::get('/command', function () {
+    Artisan::call('storage:link'); // this will do the command line job
+    return true;
+});
+// Route::get('/', function () {
+//     return redirect(env('APP_URL'));
+// })->name('login');
 Route::middleware([
     'web',
     InitializeTenancyByDomain::class,
@@ -78,6 +94,12 @@ Route::middleware([
         Route::post('/invoices/toggle-approval', [InvoiceController::class, 'toggleApproval'])->name('invoices.toggleApproval');
         Route::get('/invoices/driver/approved', [InvoiceController::class, 'approvedInvoice'])->name('invoices.dirver.approved');
         Route::get('/invoices/generate/{id}', [InvoiceController::class, 'downloadPdf'])->name('site.invoice.pdf');
+
+                // Route to display the notifications page
+            Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+            
+            // Route to update notification statuses (via AJAX)
+            Route::post('/notifications/update', [NotificationController::class, 'update'])->name('notifications.update');
 
     });
   
