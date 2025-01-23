@@ -22,6 +22,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use App\Models\UserNotification;
 use Illuminate\Database\Eloquent\Collection;
+use App\NotificationStatus;
 
 
 class InvoiceController extends Controller
@@ -112,6 +113,7 @@ class InvoiceController extends Controller
     {
         $hasNotification = UserNotification::where('user_id', $invoice->driver_id)
             ->where('notification_type', 'invoice')
+            ->where('status',NotificationStatus::ACTIVE->value )
             ->exists();
 
         if ($hasNotification) {

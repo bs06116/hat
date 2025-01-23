@@ -14,14 +14,13 @@
             <th>Status</th>
           </tr>
         </thead>
-       
         <tbody class="table-border-bottom-0">
             <tr>
               <td>Job Won</td>
               <td>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="form-check form-switch mb-2">
-                    <input data-status="active" @php if( in_array( 'job_won', $notifications->pluck('notification_type')->toArray() )) echo 'checked' @endphp  data-type="job_won" class="form-check-input status-toggle" type="checkbox" id="notificationJobWon" >
+                    <input  @php if( in_array( 'job_won', $notifications->where('status', \App\NotificationStatus::ACTIVE->value )->pluck('notification_type')->toArray() )) echo 'checked' @endphp  data-type="job_won" class="form-check-input status-toggle" type="checkbox" id="notificationJobWon" >
                     <label class="form-check-label" for="notificationJobWon"></label>
                   </div>
                 </div>
@@ -32,7 +31,7 @@
               <td>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="form-check form-switch mb-2">
-                    <input data-status="inactive" @php if( in_array( 'invoice', $notifications->pluck('notification_type')->toArray() )) echo 'checked' @endphp  data-type="invoice" class="form-check-input status-toggle" type="checkbox" id="notificationInvoice">
+                    <input  @php if( in_array( 'invoice', $notifications->where('status', \App\NotificationStatus::ACTIVE->value )->pluck('notification_type')->toArray() )) echo 'checked' @endphp  data-type="invoice" class="form-check-input status-toggle" type="checkbox" id="notificationInvoice">
                     <label class="form-check-label" for="notificationInvoice"></label>
                   </div>
                 </div>

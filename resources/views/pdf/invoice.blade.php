@@ -72,7 +72,7 @@
             <p><strong>Driver Name:</strong> {{ $invoice->user->first_name . ' ' . $invoice->user->last_name }}</p>
             <p><strong>Total Jobs:</strong> {{ $invoice->total_job }}</p>
             <p><strong>Total Hours:</strong> {{ $invoice->total_hours }}</p>
-            <p><strong>Total Amount:</strong> ${{ number_format($invoice->total_amount, 2) }}</p>
+            <p><strong>Total Amount:</strong> &#163;{{ number_format($invoice->total_amount, 2) }}</p>
 
             <!-- Job Details -->
             <h3>Job Details:</h3>

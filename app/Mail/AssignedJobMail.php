@@ -10,19 +10,15 @@ class AssignedJobMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $invoice;
-    public $jobs;
-
+    public $jobData;
     /**
      * Create a new message instance.
      *
-     * @param $invoice
-     * @param $jobs
+     * @param \App\Models\Job $jobData
      */
-    public function __construct($invoice, $jobs)
+    public function __construct($jobData)
     {
-        $this->invoice = $invoice;
-        $this->jobs = $jobs;
+        $this->jobData = $jobData;
     }
 
     /**
@@ -33,11 +29,9 @@ class AssignedJobMail extends Mailable
     public function build()
     {
         return $this->subject('Job Won from HATS')
-            ->view('email.assigned_job', ['invoice' => $this->invoice,'jobs' => $this->jobs]) // Email template
-            ->attach(storage_path( "invoice_{$this->invoice->id}.pdf")) // Attach PDF
+            ->view('email.assigned_job') // Email template
             ->with([
-                'invoice' => $this->invoice,
-                'jobs' => $this->jobs,
+                'jobData' => $this->jobData,
             ]);
     }
 }

@@ -67,21 +67,19 @@
 <body>
     <div class="email-container">
         <div class="email-header">
-            <h1>Job Attached</h1>
+            <h1>Job Won</h1>
         </div>
         <div class="email-body">
             <!-- <p>Dear <span class="highlight">[Customer Name]</span>,</p> -->
-            <p>We hope this email finds you well. Please find the attached invoice.</p>
-            <!-- <ul>
-                <li><strong>Invoice Number:</strong> INV-12345</li>
-                <li><strong>Date:</strong> [Invoice Date]</li>
-                <li><strong>Total Amount:</strong> $[Total Amount]</li>
-            </ul>
-            <p>To view the full details or make a payment, click the button below:</p>
-            <p style="text-align: center;">
-                <a href="[Payment Link]" class="button">View or Pay Invoice</a>
-            </p> -->
-            <p>If you have any questions, please don't hesitate to contact us.</p>
+            <p>You have been assigned a job from HATS. Please find the details below:</p>
+            <p><strong>Job Title:</strong> {{ $jobData->job_department_title?->job_title }}</p>
+            <p><strong>Job Location:</strong> {{ $jobData->location->name }}</p>
+            <p><strong>Job Start Date Time:</strong> {{ $jobData->start_date->format('d-m-Y')  }} {{ $jobData->start_time }}</p>
+            <p><strong>Job End Date Time:</strong> {{ $jobData->end_date->format('d-m-Y') }}  {{ $jobData->end_time }}</p>
+            <p><strong>Job Hourly Pay:</strong> {{ $jobData->hourly_pay }}</p>
+            <p><strong>Job Description:</strong> {{ $jobData->description }}</p>
+           
+            <If>If you have any questions, please don't hesitate to contact us.</p>
             <p>Thank you for choosing our services!</p>
             <p>Best regards,</p>
             <p><strong>Your HATS</strong></p>

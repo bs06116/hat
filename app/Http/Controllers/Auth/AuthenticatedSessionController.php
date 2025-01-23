@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Stancl\Tenancy\Facades\Tenancy;
 use App\RolesEnum;
-
+use App\Models\User;
 class AuthenticatedSessionController extends Controller
 {
     // Fix the return type issue by allowing either a View or RedirectResponse
@@ -48,9 +48,17 @@ class AuthenticatedSessionController extends Controller
         $credentials = $request->only('email', 'password');
         if ($tenantId = tenant('id')) {
             $credentials['tenant_id'] = $tenantId;
+            $checkSiteUser = User::where('status', UserStatus::ACTIVE->value)->whereHas('roles', function ($query) {
+                $query->where('name', RolesEnum::SITEMANAGER); // Exclude tenant admin role
+            })->get();
+            if($checkSiteUser->isEmpty()){
+                return back()->withInput()->withErrors([
+                    'email' => 'This Site is inactive. Please contact support.',
+                ]);
+            }
         }
         $credentials['status'] = UserStatus::ACTIVE->value;
-
+       
         // Attempt to authenticate the user
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             // Redirect user to their dashboard after successful login

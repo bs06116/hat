@@ -153,7 +153,6 @@
     <script src="{{asset('vendor/libs/i18n/i18n.js')}}"></script>
     <script src="{{asset('vendor/libs/typeahead-js/typeahead.js')}}"></script>
     <script src="{{asset('vendor/js/menu.js')}}"></script>
-
     <!-- endbuild -->
 
     <!-- Vendors JS -->

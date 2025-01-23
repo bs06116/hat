@@ -28,7 +28,6 @@
           @enderror
         </div>
       </div>
-
       <!-- Site Admin First Name and Last Name (two fields in one row) -->
       <div class="row">
         <div class="col-md-6 mt-4">

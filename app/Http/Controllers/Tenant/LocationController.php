@@ -71,6 +71,9 @@ class LocationController extends Controller
             abort(code: 403);
         }
         $location->delete();
+        foreach ($location->jobs as $job) {
+            $job->delete();
+        }
         return redirect()->route('locations.index')->with('success', 'Location deleted successfully!');
     }
 }

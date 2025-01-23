@@ -14,6 +14,7 @@ use App\Http\Requests\DriverUpdateRequest;
 use App\Models\Department;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Job;
+use Illuminate\Support\Facades\Log;
 
 use Hash;
 
@@ -151,16 +152,43 @@ class DriverController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
         if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
-        $user->delete();
 
-        // Redirect back with success message
-        return redirect()->route('drivers.index')->with('message', 'Driver deleted successfully');
+        try {
+            // Retrieve the user by ID
+            $user = User::findOrFail($id);
+
+            // Log the user details
+            Log::info('Deleting user: ', ['user' => $user->toArray()]);
+
+            // Ensure relationships are correctly defined in the User model
+            if (method_exists($user, 'departments')) {
+                Log::info('Detaching departments for user: ', ['user_id' => $user->id, 'departments' => $user->departments->pluck('id')->toArray()]);
+                $user->departments()->detach();
+            }
+            if (method_exists($user, 'jobsBids')) {
+                Log::info('Detaching job bids for user: ', ['user_id' => $user->id, 'jobsBids' => $user->jobsBids->pluck('id')->toArray()]);
+                $user->jobsBids()->detach();
+            }
+
+            // Delete the user
+            $user->delete();
+
+            // Redirect back with success message
+            return redirect()->route('drivers.index')->with('message', 'Driver deleted successfully');
+        } catch (\Exception $e) {
+            // Log the exception
+            Log::error('Failed to delete driver: ' . $e->getMessage());
+
+            // Handle the exception and redirect back with an error message
+            return redirect()->route('drivers.index')->with('error', 'Failed to delete driver: ' . $e->getMessage());
+        }
     }
+
     public function toggleStatus(Request $request)
     {
         if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {

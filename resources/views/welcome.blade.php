@@ -103,10 +103,13 @@
             <p>Choose a site to login:</p>
             <div class="site-buttons">
             @php
+                   $tenants = \App\Models\Tenant::with(['user', 'domain'])->get();
+
                     // Fetch tenants and associated domains
                     $domains = DB::table('domains')
                                 ->join('tenants', 'domains.tenant_id', '=', 'tenants.id')
                                 ->select('tenants.name as tenant_name', 'domains.domain')
+                                ->where('domains.tenant_id', '!=', 1)
                                 ->get();
                 @endphp
                 @foreach($domains as $domain)

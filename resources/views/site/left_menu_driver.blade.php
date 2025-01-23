@@ -45,13 +45,13 @@
                     </li>
                     </ul>
             </li>
-            <li class="menu-item ">
+            <li class="menu-item {{ request()->is('notifications*') ? ' active' : '' }}">
             <a href="{{route("notifications.index")}}" class="menu-link">
             <i class="menu-icon tf-icons ti ti-bell"></i>
                 <div data-i18n="Notifications">Notifications</div>
               </a>
             </li>
-            <li class="menu-item ">
+            <li class="menu-item  {{ request()->is('invoice*') ? ' active' : '' }}">
             <a href="{{route("invoices.dirver.approved")}}" class="menu-link">
             <i class="menu-icon tf-icons ti ti-receipt"></i>
                 <div data-i18n="Invoicing">Invoicing</div>

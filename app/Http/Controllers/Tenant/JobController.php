@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use App\RolesEnum;
 use App\JobStatus;
 use App\Models\UserNotification;
+use App\NotificationStatus;
 
 
 class JobController extends Controller
@@ -269,6 +270,7 @@ class JobController extends Controller
                 $jobBid->save();
                 $hasNotification = UserNotification::where('user_id', $driver->id)
                                 ->where('notification_type', 'job_won')
+                                ->where('status',NotificationStatus::ACTIVE->value )
                                 ->exists();
             if($hasNotification){
                 AssignedJob::dispatch($job, $driver);
