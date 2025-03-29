@@ -186,3 +186,48 @@
 
 </html>
 
+<script>
+   $(document).ready(function () {
+    function loadNotifications() {
+        $.ajax({
+            url: "{{ route('notifications.fetch') }}",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                let notificationList = $(".dropdown-notifications-list ul");
+                notificationList.empty();
+
+                if (data.length > 0) {
+                    data.forEach((notification) => {
+                        let notificationItem = `
+                        <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                     <div class="avatar">
+                                <span class="avatar-initial rounded-circle bg-label-bell"
+                                  > <i class="ti ti-bell ti-md"></i></span>
+                              </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <small class="mb-1 d-block text-body">${notification.message}</small>
+                                    <small class="text-muted">${notification.time_ago}</small>
+                                </div>
+                               
+                            </div>
+                        </li>`;
+                        notificationList.append(notificationItem);
+                    });
+                } else {
+                    notificationList.append(`<li class="list-group-item">No new notifications</li>`);
+                }
+            }
+        });
+    }
+
+    // Load notifications every 30 seconds
+    loadNotifications();
+    setInterval(loadNotifications, 30000);
+});
+
+</script>
+

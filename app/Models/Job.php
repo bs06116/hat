@@ -17,7 +17,7 @@ class Job extends Model
      */
     protected $table = 'driver_job';
     protected $fillable = [
-         'location_id', 'title', 'start_date', 'end_date', 'start_time', 'end_time', 'description','tenant_id','user_id', 'hourly_pay', 'status'
+        'booking_ref', 'location_id', 'passenger_name', 'passenger_contact_number', 'title', 'start_date', 'end_date', 'start_time', 'end_time', 'description','tenant_id','round_trip','user_id', 'hourly_pay', 'status'
     ];
     protected $casts = [
         'start_date' => 'datetime',
@@ -69,5 +69,9 @@ class Job extends Model
     // {
     //     return $this->belongsToMany(User::class, 'driver_assign_job');
     // }
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
 
 }

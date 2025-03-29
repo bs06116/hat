@@ -7,7 +7,28 @@
     <form method="POST" action="{{ route('jobs.update', $job->id) }}" class="card-body">
       @csrf
       @method('PUT')
+      <div class="row">
+      <!-- Passenger Name -->
+      <div class="col-md-6 mt-4">
+        <label for="passenger_name" class="form-label">Passenger Name</label>
+        <input type="text" id="passenger_name" name="passenger_name" value="{{ old('hourly_pay', $job->passenger_name) }}" class="form-control"
+          />
+    
+        @error('passenger_name')
+      <div class="mt-2 text-danger">{{ $message }}</div>
+    @enderror
+      </div>
 
+      <!-- passenger_contact_number -->
+      <div class="col-md-6 mt-4">
+        <label for="passenger_contact_number" class="form-label">Passenger Contact Number</label>
+        <input type="text" id="passenger_contact_number" name="passenger_contact_number" value="{{ old('hourly_pay', $job->passenger_contact_number) }}" class="form-control"
+          />
+        @error('passenger_contact_number')
+      <div class="mt-2 text-danger">{{ $message }}</div>
+    @enderror
+      </div>
+      </div>
       <div class="row">
         <!-- Department Selection -->
         <div class="col-md-6 mt-4">
@@ -115,7 +136,33 @@
           <div class="mt-2 text-danger">{{ $message }}</div>
         @enderror
       </div>
+ 
+      <!-- Pickup and Drop Address -->
+      <div class="mt-4">
+        <label for="addresses" class="form-label">Addresses</label>
+          @foreach(old('addresses', $addresses ?? []) as $index => $address)
+          <div class="input-group mb-3">
+        <input type="text" name="addresses[]" class="form-control" placeholder="Address" value="{{ $address }}" required />
+        @if($index > 0)
+        <button type="button" class="btn btn-danger remove-address">Remove</button>
+        @endif
+          </div>
+          @endforeach
+        </div>
+       
+        <div id="addresses"></div>
+        <div class="input-group mb-3">
+        <button type="button" class="btn btn-success add-address">Add</button>
+        </div>
+     
 
+    
+      <!-- add input checkbo box for round trip -->
+      <div  class="mt-4">
+        <label for="round_trip" class="form-label"> is Round Trip?</label>
+        <input type="checkbox"  name="round_trip" {{ old('round_trip', $job->round_trip) ? 'checked' : '' }}>
+
+      </div>
       <!-- Submit and Cancel -->
       <div class="pt-4">
         <button type="submit" class="btn btn-primary me-4">Update</button>
@@ -125,6 +172,28 @@
   </div>
 </div>
 @endsection
+@push('scripts')
+      <script>
+        $(document).ready(function () {
+          // Add new address field at the bottom
+          $(document).on('click', '.add-address', function () {
+        const newField = `
+          <div class="input-group mb-3">
+            <input type="text" name="addresses[]" class="form-control" placeholder="Drop Address" required />
+            <button type="button" class="btn btn-danger remove-address">Remove</button>
+          </div>`;
+        $('#addresses').append(newField);
+          });
+
+          // Remove address field
+          $(document).on('click', '.remove-address', function () {
+        $(this).closest('.input-group').remove();
+          });
+        });
+      </script>
+      @endpush
+       
+      
 
 @push('scripts')
 <script>

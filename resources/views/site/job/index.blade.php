@@ -1,6 +1,7 @@
 @extends('site.layouts.app')
 
 @section('content')
+
 <div class="container-xxl flex-grow-1 container-p-y">
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
@@ -13,10 +14,12 @@
       <table class="table">
         <thead>
           <tr>
+          <th>Booking Ref</th>
             <th>Job Title</th>
             <th>Location</th>
             <th>Department</th>
             <th>Hourly Pay (&pound;)</th>
+            <th>is Round Trip</th>
             <th>Created Date</th>
             <th>Actions</th>
           </tr>
@@ -24,8 +27,12 @@
         <tbody class="table-border-bottom-0">
           @forelse ($jobs as $job)
             <tr>
+            <td>
+                <i class=" text-primary me-4"></i>
+                <span class="fw-medium">{{ $job->booking_ref }}</span>
+              </td>
               <td>
-                <i class="ti ti-briefcase ti-md text-primary me-4"></i>
+                <i class=" text-primary me-4"></i>
                 <span class="fw-medium">{{ $job->job_department_title?->job_title }}</span>
               </td>
               <td>
@@ -36,6 +43,7 @@
                      @endforeach
               </td> 
               <td>{{ $job->hourly_pay }}</td> 
+              <td>{{ $job->round_trip == 1?'Yes':'No' }}</td> 
               <td>{{ $job->created_at->format('d-m-Y') }}</td> 
 
               <td>
@@ -53,7 +61,7 @@
                   <button type="submit" class="btn btn-danger"><i class="ti ti-trash me-2"></i></button>
                 </form>
               </td>
-            </tr>
+            </tr>            
           @empty
             <tr>
               <td colspan="6" class="text-center">No Jobs found.</td>
@@ -61,6 +69,13 @@
           @endforelse
         </tbody>
       </table>
+      <div class="row">
+   
+    <div class="col-md-6 d-flex justify-content-end">
+        {{ $jobs->links('pagination::bootstrap-5') }}
+    </div>
+</div>
+
     </div>
   </div>
 </div>

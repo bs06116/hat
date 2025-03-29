@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Tenant\NotificationController;
 use App\Http\Controllers\TenantController;
 use Illuminate\Support\Facades\Route;
     // Route::get('/', function () {
@@ -20,6 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('tenants',  TenantController::class);
    // Route::patch('/tenants/{tenant}/toggle-status', [TenantController::class, 'toggleStatus'])->name('tenants.toggleStatus');
    Route::post('/tenants/toggle-status', [TenantController::class, 'toggleStatus'])->name('tenants.toggleStatus');
+   Route::get('/notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
+   Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 
 });
 

@@ -17,6 +17,8 @@
             <th>Total Hours</th>
             <th>Total Amount</th>
             <th>Status</th>
+            <th>Download</th>
+
             <th>Actions</th>
           </tr>
         </thead>
@@ -34,6 +36,11 @@
                   {{ $invoice->is_approved ? 'Approved' : 'In Process' }}
                 </span>
               </td>
+              <td>
+             
+             <a href="{{ route('site.invoice.pdf', $invoice->id) }}">
+             <i class="ti ti-download ti-md text-primary me-4"></i></a>
+           </td>
               <td>
                 <button 
                   data-id="{{ $invoice->id }}" 

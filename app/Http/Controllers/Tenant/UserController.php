@@ -33,7 +33,7 @@ class UserController extends Controller
                  $query->where('name', RolesEnum::SITEUSER); // Exclude tenant admin role
              })
              ->orderBy('created_at', 'desc')  // Order by latest
-             ->get();      
+             ->paginate( 10);      
        return view('site.user.index', compact('users'));
     }
 

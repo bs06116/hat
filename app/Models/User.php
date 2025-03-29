@@ -23,6 +23,11 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
+        'phone',
+        'driver_number',
+        'note',
+        'rating',
+        'address',
         'tenant_id',
         'status'
     ];

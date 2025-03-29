@@ -60,7 +60,7 @@ class DriverController extends Controller
         $query->where('name', RolesEnum::SITEDRIVER); // Only include users with the driver role
         })
         ->orderBy('created_at', 'desc')  // Order by latest
-        ->get();
+        ->paginate( 10);
        return view('site.driver.index', compact('drivers'));
     }
 
@@ -90,6 +90,10 @@ class DriverController extends Controller
             'last_name' => $request->last_name,
             'email' => $request->email,
             'address' => $request->address,
+            'phone' => $request->phone,
+            'driver_number' => $request->driver_number,
+            'rating' => $request->rating,
+            'note' => $request->note,
             'password' => Hash::make($request->password),
         ]);
         $user->departments()->attach($request->departments);

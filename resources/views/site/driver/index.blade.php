@@ -74,6 +74,12 @@
           @endforelse
         </tbody>
       </table>
+      <div class="row">
+   
+    <div class="col-md-6 d-flex justify-content-end">
+        {{ $drivers->links('pagination::bootstrap-5') }}
+    </div>
+</div>
     </div>
   </div>
 </div>
