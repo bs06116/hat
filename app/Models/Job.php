@@ -17,7 +17,7 @@ class Job extends Model
      */
     protected $table = 'driver_job';
     protected $fillable = [
-        'booking_ref', 'location_id', 'passenger_name', 'passenger_contact_number', 'title', 'start_date', 'end_date', 'start_time', 'end_time', 'description','tenant_id','round_trip','user_id', 'hourly_pay', 'status'
+        'booking_ref', 'location_id', 'passenger_name', 'passenger_contact_number', 'title', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'wait_return', 'return_time', 'destination_time' ,'tenant_id','round_trip','user_id', 'hourly_pay', 'status'
     ];
     protected $casts = [
         'start_date' => 'datetime',

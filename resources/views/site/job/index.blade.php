@@ -19,7 +19,7 @@
             <th>Location</th>
             <th>Department</th>
             <th>Hourly Pay (&pound;)</th>
-            <th>is Round Trip</th>
+            <!-- <th>is Round Trip</th> -->
             <th>Created Date</th>
             <th>Actions</th>
           </tr>
@@ -43,7 +43,7 @@
                      @endforeach
               </td> 
               <td>{{ $job->hourly_pay }}</td> 
-              <td>{{ $job->round_trip == 1?'Yes':'No' }}</td> 
+              <!-- <td>{{ $job->round_trip == 1?'Yes':'No' }}</td>  -->
               <td>{{ $job->created_at->format('d-m-Y') }}</td> 
 
               <td>

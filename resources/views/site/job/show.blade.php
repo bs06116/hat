@@ -16,45 +16,58 @@
       
       <div class="card-body">
       <div class="row mb-3">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <p><strong>Passenger Name:</strong> {{ $job->passenger_name }} </p>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <p><strong>Passenger Contact Number:</strong> {{ $job->passenger_contact_number  }}</p>
           </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <p><strong>Department:</strong>
               @foreach($job->departments as $department)
           {{ $department->name }}@if(!$loop->last), @endif
         @endforeach
             </p>
           </div>
-          <div class="col-md-6">
+        </div>
+          
+          
+        <div class="row mb-3">
+        <div class="col-md-4">
             <p><strong>Location:</strong> {{ $job->location->name }}</p>
           </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <p><strong>Start Date:</strong> {{ $job->start_date->format('d-m-Y') }} </p>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <p><strong>End Date:</strong> {{ $job->end_date->format('d-m-Y')  }}</p>
           </div>
         </div>
         <div class="row mb-3">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <p><strong>Shift Start Time:</strong> {{   date('h:i A', strtotime($job->start_time)) }}</p>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <p><strong>Shift End Time:</strong> {{   date('h:i A', strtotime($job->end_time)) }}</p>
+          </div>
+          <div class="col-md-4">
+            <p><strong>Wait & Return:</strong> {{   date('h:i A', strtotime($job->wait_return)) }}</p>
           </div>
         </div>
         <div class="row mb-3">
-          <div class="col-md-6">
+          
+          <div class="col-md-4">
+            <p><strong>Return Time:</strong> {{   date('h:i A', strtotime($job->return_time)) }}</p>
+          </div>
+          <div class="col-md-4">
+            <p><strong>Destination Time:</strong> {{   date('h:i A', strtotime($job->destination_time)) }}</p>
+          </div>
+          <div class="col-md-4">
             <p><strong>Hourly Pay:</strong> £{{ number_format($job->hourly_pay, 2) }}</p>
           </div>
+        </div>
+        <div class="row mb-3">
+          
           <div class="col-md-6">
             <p><strong>Description:</strong> {{ $job->description }}</p>
           </div>

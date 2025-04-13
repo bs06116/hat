@@ -11,9 +11,9 @@
       <!-- Passenger Name -->
       <div class="col-md-6 mt-4">
         <label for="passenger_name" class="form-label">Passenger Name</label>
-        <input type="text" id="passenger_name" name="passenger_name" value="{{ old('passenger_name') }}" class="form-control"
-          />
-    
+        <input type="text" id="passenger_name" name="passenger_name" value="{{ old('passenger_name') }}"
+        class="form-control" />
+
         @error('passenger_name')
       <div class="mt-2 text-danger">{{ $message }}</div>
     @enderror
@@ -22,8 +22,8 @@
       <!-- passenger_contact_number -->
       <div class="col-md-6 mt-4">
         <label for="passenger_contact_number" class="form-label">Passenger Contact Number</label>
-        <input type="text" id="passenger_contact_number" name="passenger_contact_number" value="{{ old('passenger_contact_number') }}" class="form-control"
-          />
+        <input type="text" id="passenger_contact_number" name="passenger_contact_number"
+        value="{{ old('passenger_contact_number') }}" class="form-control" />
         @error('passenger_contact_number')
       <div class="mt-2 text-danger">{{ $message }}</div>
     @enderror
@@ -125,8 +125,30 @@
     @enderror
       </div>
       </div>
+      <div class="row mt-4">
+      <div class="col-md-4">
+        <label for="wait_return" class="form-label">Wait & Return</label>
+        <input type="text" id="wait_return" name="wait_return" class="form-control"  />
+        @error('wait_return')
+      <div class="mt-2 text-danger">{{ $message }}</div>
+    @enderror
+      </div>
+      <div class="col-md-4">
+        <label for="return_time" class="form-label">Return Time</label>
+        <input type="text" id="return_time" name="return_time" class="form-control"  />
+        @error('return_time')
+      <div class="mt-2 text-danger">{{ $message }}</div>
+    @enderror
+      </div>
+      <div class="col-md-4">
 
-
+        <label for="destination_time" class="form-label">Destination Time</label>
+        <input type="text" id="destination_time" name="destination_time" class="form-control"  />
+        @error('destination_time')
+      <div class="mt-2 text-danger">{{ $message }}</div>
+    @enderror
+      </div>
+      </div>
 
       <!-- Job Description -->
       <div class="mt-4">
@@ -139,46 +161,27 @@
 
       <!-- Pickup and Drop Address -->
       <div class="mt-4">
-        <label for="addresses" class="form-label">Addresses</label>
-        <div id="addresses">
-          <!-- Pickup Address -->
-          <div class="input-group mb-3">
+      <label for="addresses" class="form-label">Addresses</label>
+      <div id="addresses">
+        <!-- Pickup Address -->
+        <div class="input-group mb-3">
         <input type="text" name="addresses[]" class="form-control" placeholder="Pickup Address" required />
-          </div>
-          <!-- Drop Address -->
-          <div class="input-group mb-3">
+        </div>
+        <!-- Drop Address -->
+        <div class="input-group mb-3">
         <input type="text" name="addresses[]" class="form-control" placeholder="Drop Address" required />
-        <button type="button" class="btn btn-success add-address">Add</button>
-          </div>
+        <button type="button" class="btn btn-primary add-address">Add</button>
         </div>
       </div>
+      </div>
 
-      @push('scripts')
-      <script>
-        $(document).ready(function () {
-          // Add new address field
-          $(document).on('click', '.add-address', function () {
-        const newField = `
-          <div class="input-group mb-3">
-            <input type="text" name="addresses[]" class="form-control" placeholder="Drop Address" required />
-            <button type="button" class="btn btn-danger remove-address">Remove</button>
-          </div>`;
-        $('#addresses').append(newField);
-          });
 
-          // Remove address field
-          $(document).on('click', '.remove-address', function () {
-        $(this).closest('.input-group').remove();
-          });
-        });
-      </script>
-      @endpush
       <!-- add input checkbo box for round trip -->
-      <div class="mt-4">
+      <!-- <div class="mt-4">
       <label for="round_trip" class="form-label"> is Round Trip?</label>
       <input type="checkbox" name="round_trip">
 
-      </div>
+      </div> -->
 
       <!-- Submit and Cancel -->
       <div class="pt-4">
@@ -189,7 +192,26 @@
     </div>
   </div>
 @endsection
+@push('scripts')
+  <script>
+    $(document).ready(function () {
+    // Add new address field
+    $(document).on('click', '.add-address', function () {
+      const newField = `
+        <div class="input-group mb-3">
+        <input type="text" name="addresses[]" class="form-control" placeholder="Drop Address" required />
+        <button type="button" class="btn btn-danger remove-address">Remove</button>
+        </div>`;
+      $('#addresses').append(newField);
+    });
 
+    // Remove address field
+    $(document).on('click', '.remove-address', function () {
+      $(this).closest('.input-group').remove();
+    });
+    });
+  </script>
+@endpush
 @push('scripts')
   <script>
     @if (session('success'))
