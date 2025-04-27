@@ -10,14 +10,35 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Job extends Model
 {
     use HasFactory;
-     /**
+    /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'driver_job';
     protected $fillable = [
-        'booking_ref', 'location_id', 'passenger_name', 'passenger_contact_number', 'title', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'wait_return', 'return_time', 'destination_time' ,'tenant_id','round_trip','user_id', 'hourly_pay', 'status'
+        'booking_ref',
+        'location_id',
+        'passenger_name',
+        'passenger_contact_number',
+        'title',
+        'vehicle_type',
+        'pay_type',
+        'start_date',
+        'end_date',
+        'start_time',
+        'end_time',
+        'local_authorities',
+        'round_trip',
+        'description',
+        'wait_return',
+        'return_time',
+        'destination_time',
+        'tenant_id',
+        'round_trip',
+        'user_id',
+        'hourly_pay',
+        'status'
     ];
     protected $casts = [
         'start_date' => 'datetime',
@@ -57,14 +78,14 @@ class Job extends Model
     {
         return $this->hasMany(JobBid::class, 'job_id'); // Replace 'job_id' if it uses a different foreign key
     }
-     // Automatically set tenant_id and user_id when creating a location
-     protected static function booted()
-     {
-         static::creating(function ($location) {
-             $location->tenant_id = tenant('id'); // Assign tenant ID
-             $location->user_id = auth()->id();  // Assign logged-in user ID
-         });
-     }
+    // Automatically set tenant_id and user_id when creating a location
+    protected static function booted()
+    {
+        static::creating(function ($location) {
+            $location->tenant_id = tenant('id'); // Assign tenant ID
+            $location->user_id = auth()->id();  // Assign logged-in user ID
+        });
+    }
     // public function drivers()
     // {
     //     return $this->belongsToMany(User::class, 'driver_assign_job');

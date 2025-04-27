@@ -61,11 +61,13 @@ class JobController extends Controller
             'department_ids' => 'required', // updated for array validation
             'location_id' => 'required',
             'title' => 'required',
+            'vehicle_type' => 'required',
+            'pay_type' => 'required',
             'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            // 'end_date' => 'required|date',
             'hourly_pay' => 'required|numeric',
             'start_time' => 'required|date_format:H:i', // Validate time format
-            'end_time' => 'required|date_format:H:i',   // Validate time format
+            // 'end_time' => 'required|date_format:H:i',   // Validate time format
         ]);
         // DB::beginTransaction();
         $bookingRef = 'JOB-' . strtoupper(uniqid());
@@ -78,6 +80,8 @@ class JobController extends Controller
                 'passenger_contact_number' => $request->passenger_contact_number,
                 'location_id' => $request->location_id,
                 'title' => $request->title,
+                'vehicle_type' => $request->vehicle_type,
+                'pay_type' => $request->pay_type,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'hourly_pay' => $request->hourly_pay,
@@ -89,7 +93,7 @@ class JobController extends Controller
                 'description' => $request->description,
                 // 'round_trip' => $request->round_trip == 'on' ? 1 : 0
             ]);
-            
+
             $addresses = $request->addresses;
 
             if ($addresses) {
@@ -110,12 +114,12 @@ class JobController extends Controller
             foreach ($drivers as $driver) {
                 $this->notificationService->create($driver->id, "New job posted");
                 // Send SMS to driver
-               // Log::info($driver->driver_number);
+                // Log::info($driver->driver_number);
                 $message = "New job posted: " . $job->title . ". Please check your app for details.";
-                $this->twilioService->sendSMS("+44".$driver->driver_number, $message);
+                $this->twilioService->sendSMS("+44" . $driver->driver_number, $message);
             }
 
-              DB::commit();
+            DB::commit();
 
             return redirect()->route('jobs.index')->with('success', 'Job created successfully.');
         } catch (\Exception $e) {
@@ -186,7 +190,7 @@ class JobController extends Controller
             'location_id' => 'required|exists:locations,id', // Ensure the location exists
             'title' => 'required|string|max:255', // Optional: add max length
             'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            // 'end_date' => 'required|date',
             'hourly_pay' => 'required|numeric|min:0', // Optional: ensure it's not negative
         ]);
         $data = $request->all();
@@ -195,7 +199,7 @@ class JobController extends Controller
         $data['start_time'] = $request->start_time ?: $job->start_time;
         $data['end_time'] = $request->end_time ?: $job->end_time;
         $data['status'] = JobStatus::INPROGRESS->value;
-  
+
 
         // Update the job details
         $job->update($data); // Exclude department_ids from the update
@@ -229,7 +233,7 @@ class JobController extends Controller
         }
         $job->delete();
         $job->addresses()->delete();
-       // $job->job_bids()->delete(); // Delete job bids associated with the job
+        // $job->job_bids()->delete(); // Delete job bids associated with the job
         $job->driversBids()->delete(); // Delete driver bids associated with the job
         $job->departments()->detach(); // Detach the job from departments
         return redirect()->route('jobs.index')->with('success', 'Job deleted successfully.');
@@ -357,7 +361,7 @@ class JobController extends Controller
             $this->notificationService->create($driverId, "Admin send the Counter Offer to dirver!");
             // Send SMS to driver
             $message = "Admin send the Counter Offer to dirver!";
-            $this->twilioService->sendSMS("+44".$driverId, $message);
+            $this->twilioService->sendSMS("+44" . $driverId, $message);
             // Send notification to driver
             return redirect()->route('jobs.index')->with('success', 'Admin send the Counter Offer to dirver!');
         }
@@ -370,7 +374,7 @@ class JobController extends Controller
             $this->notificationService->create($driverId, "Admin has rejected your offer. Please reapply if you wish to proceed!");
             // Send SMS to driver
             $message = "Admin has rejected your offer. Please reapply if you wish to proceed!";
-            $this->twilioService->sendSMS("+44".$driverId, $message);
+            $this->twilioService->sendSMS("+44" . $driverId, $message);
             return redirect()->route('jobs.index')->with('success', 'Admin has rejected your offer. Please reapply if you wish to proceed!');
         }
         $driver = User::findOrFail($driverId);
@@ -393,7 +397,7 @@ class JobController extends Controller
             $this->notificationService->create($driver->id, "You have been assigned to a new job");
             // Send SMS to driver
             $message = "You have been assigned to a new job: " . $job->title . ". Please check your app for details.";
-            $this->twilioService->sendSMS("+44".$driver->driver_number, $message);
+            $this->twilioService->sendSMS("+44" . $driver->driver_number, $message);
             return redirect()->route('jobs.index')->with('success', 'Job assigned successfully!');
         }
 
