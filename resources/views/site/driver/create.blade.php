@@ -76,28 +76,43 @@
       <div class="col-md-6">
         <div class="mt-4">
         <label for="driver_number" class="form-label">Driver Number</label>
-        <input type="text" id="driver_number" name="driver_number" value="{{ old('driver_number') }}" class="form-control"
-          required autofocus autocomplete="driver_number" />
+        <input type="text" id="driver_number" name="driver_number" value="{{ old('driver_number') }}"
+          class="form-control" required autofocus autocomplete="driver_number" />
         @error('driver_number')
       <div class="mt-2 text-danger">{{ $message }}</div>
     @enderror
         </div>
       </div>
-      <!-- <div class="col-md-6">
+      <div class="col-md-6">
         <div class="mt-4">
-        <label for="rating" class="form-label">Rating</label>
-        <select name="rating" id="rating" class="form-control">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-
+        <label for="location" class="form-label">Vehicle</label>
+        <select name="vehicle_type" id="vehicle_type" class="form-control" required>
+          <option value="">Vehicle Type</option>
+          <option value="5seater">5 seater</option>
+          <option value="7seater">7 seater</option>
+          <option value="9seater">9 seater</option>
+          <option value="Iw">1 WAV</option>
         </select>
-        @error('rating')
+        @error('vehicle_type')
       <div class="mt-2 text-danger">{{ $message }}</div>
     @enderror
         </div>
+      </div>
+      <!-- <div class="col-md-6">
+      <div class="mt-4">
+      <label for="rating" class="form-label">Rating</label>
+      <select name="rating" id="rating" class="form-control">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+
+      </select>
+      @error('rating')
+      <div class="mt-2 text-danger">{{ $message }}</div>
+    @enderror
+      </div>
       </div> -->
       </div>
       <!-- Notes -->

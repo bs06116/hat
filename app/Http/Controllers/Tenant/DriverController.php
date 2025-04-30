@@ -20,7 +20,7 @@ use Hash;
 
 class DriverController extends Controller
 {
-      /**
+    /**
      * Display a listing of the resource.
      */
     public function dashboard()
@@ -29,39 +29,39 @@ class DriverController extends Controller
             abort(code: 403);
         }
         $driver = auth()->user(); // Assuming the driver is authenticated
-         $driverDepartmentIds = $driver->departments->pluck('id'); // Get department IDs for the driver
-       // Fetch all tenants from the database
-       $totalAvailableJobs = Job::where('tenant_id',tenant('id'))->whereIn('id', function ($query) use ($driverDepartmentIds) {
-        $query->select('job_id')
-              ->from('department_job')
-              ->whereIn('department_id', $driverDepartmentIds); // Filter by department IDs
+        $driverDepartmentIds = $driver->departments->pluck('id'); // Get department IDs for the driver
+        // Fetch all tenants from the database
+        $totalAvailableJobs = Job::where('tenant_id', tenant('id'))->whereIn('id', function ($query) use ($driverDepartmentIds) {
+            $query->select('job_id')
+                ->from('department_job')
+                ->whereIn('department_id', $driverDepartmentIds); // Filter by department IDs
         })->whereDoesntHave('bidders')
-        ->count();
-        $totalWonJobs = Job::where('tenant_id',tenant('id'))->whereIn('id', function ($query) use ($driverDepartmentIds) {
-           $query->select('job_id')
-                 ->from('department_job')
-                 ->whereIn('department_id', $driverDepartmentIds); // Filter by department IDs
-       })->whereHas('bids', function ($query) use ($driver) {
-           $query->where('driver_id', $driver->id)
-                 ->where('assigned', 1); // Only include assigned bids
-       })->count();
-         return view('site.driver.dashboard',compact('totalAvailableJobs','totalWonJobs'));
+            ->count();
+        $totalWonJobs = Job::where('tenant_id', tenant('id'))->whereIn('id', function ($query) use ($driverDepartmentIds) {
+            $query->select('job_id')
+                ->from('department_job')
+                ->whereIn('department_id', $driverDepartmentIds); // Filter by department IDs
+        })->whereHas('bids', function ($query) use ($driver) {
+            $query->where('driver_id', $driver->id)
+                ->where('assigned', 1); // Only include assigned bids
+        })->count();
+        return view('site.driver.dashboard', compact('totalAvailableJobs', 'totalWonJobs'));
     }
-  /**
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value, RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
-       // Fetch all tenants from the database
-       $drivers = User::with('departments')->whereHas('roles', function ($query) {
-        $query->where('name', RolesEnum::SITEDRIVER); // Only include users with the driver role
+        // Fetch all tenants from the database
+        $drivers = User::with('departments')->whereHas('roles', function ($query) {
+            $query->where('name', RolesEnum::SITEDRIVER); // Only include users with the driver role
         })
-        ->orderBy('created_at', 'desc')  // Order by latest
-        ->paginate( 10);
-       return view('site.driver.index', compact('drivers'));
+            ->orderBy('created_at', 'desc')  // Order by latest
+            ->paginate(10);
+        return view('site.driver.index', compact('drivers'));
     }
 
     /**
@@ -69,19 +69,19 @@ class DriverController extends Controller
      */
     public function create()
     {
-        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value, RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $departments = Department::all();
-        return view( 'site.driver.create',compact('departments'));
+        return view('site.driver.create', compact('departments'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(DriverStoreRequest $request)
-    {  
-        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
+    {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value, RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         // Create Site Manager User
@@ -89,6 +89,7 @@ class DriverController extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
+            'vehicle_type' => $request->vehicle_type,
             'address' => $request->address,
             'phone' => $request->phone,
             'driver_number' => $request->driver_number,
@@ -107,10 +108,10 @@ class DriverController extends Controller
      */
     public function show(User $user)
     {
-        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value, RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
-       
+
     }
 
     /**
@@ -118,14 +119,14 @@ class DriverController extends Controller
      */
     public function edit(User $driver)
     {
-        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value, RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
-              // Fetch all tenants from the database
+        // Fetch all tenants from the database
 
         // Fetch related departments (if applicable)
         $departments = Department::all(); // Assumes you have a departments table     
-        return view('site.driver.edit', compact('driver','departments'));
+        return view('site.driver.edit', compact('driver', 'departments'));
     }
 
     /**
@@ -133,24 +134,25 @@ class DriverController extends Controller
      */
     public function update(DriverUpdateRequest $request, User $driver)
     {
-        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value, RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
-    // Update user details
-    $driver->first_name = $request->input('first_name');
-    $driver->last_name = $request->input('last_name');
-    $driver->email = $request->input('email');
-    // Update the password only if provided
-    if ($request->filled('password')) {
-        $driver->password = Hash::make($request->input('password'));
-    }
-    $driver->save();
-    // Sync departments if provided (assuming a many-to-many relationship)
-    if ($request->has('departments')) {
-        $driver->departments()->sync($request->departments);
-    }
-    // Redirect with a success message
-    return redirect()->route('drivers.index')->with('success', 'Driver updated successfully.');
+        // Update user details
+        $driver->first_name = $request->input('first_name');
+        $driver->last_name = $request->input('last_name');
+        $driver->vehicle_type = $request->input('vehicle_type');
+        $driver->email = $request->input('email');
+        // Update the password only if provided
+        if ($request->filled('password')) {
+            $driver->password = Hash::make($request->input('password'));
+        }
+        $driver->save();
+        // Sync departments if provided (assuming a many-to-many relationship)
+        if ($request->has('departments')) {
+            $driver->departments()->sync($request->departments);
+        }
+        // Redirect with a success message
+        return redirect()->route('drivers.index')->with('success', 'Driver updated successfully.');
     }
 
     /**
@@ -158,7 +160,7 @@ class DriverController extends Controller
      */
     public function destroy($id)
     {
-        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value, RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
 
@@ -195,7 +197,7 @@ class DriverController extends Controller
 
     public function toggleStatus(Request $request)
     {
-        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value,RolesEnum::SITEUSER->value])) {
+        if (!Auth::user()->hasRole([RolesEnum::SITEMANAGER->value, RolesEnum::SITEUSER->value])) {
             abort(code: 403);
         }
         $user = User::findOrFail($request->driver_id);

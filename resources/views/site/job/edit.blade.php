@@ -124,7 +124,7 @@
       <div class="row">
       <!-- Start Date -->
       <div class="col-md-6 mt-4">
-        <label for="start_date" class="form-label">Start Date</label>
+        <label for="start_date" class="form-label">Journey Start Date</label>
         <input type="date" id="start_date" name="start_date"
         value="{{ old('start_date', $job->start_date ? $job->start_date->toDateString() : '') }}"
         class="form-control" required />
@@ -135,7 +135,7 @@
       <!-- End Date -->
       <div class="col-md-6 mt-4 end_date_container"
         style="display: {{ old('pay_type', $job->pay_type) == 'shift' ? 'none' : 'block' }}">
-        <label for="end_date" class="form-label">End Date</label>
+        <label for="end_date" class="form-label">Journey End Date</label>
         <input type="date" id="end_date" name="end_date"
         value="{{ old('end_date', $job->end_date ? $job->end_date->toDateString() : '') }}" class="form-control"
         required />
@@ -150,7 +150,7 @@
       <div class="row">
       <!-- Start Time -->
       <div class="col-md-6 mt-4">
-        <label for="start_time" class="form-label">Start Time</label>
+        <label for="start_time" class="form-label">Journey Start Time</label>
         <input type="time" id="start_time" name="start_time" value="{{ old('start_time', $job->start_time) }}"
         class="form-control" required />
         @error('start_time')
@@ -160,7 +160,7 @@
       <!-- End Time -->
       <div class="col-md-6 mt-4 end_time_container"
         style="display: {{ old('pay_type', $job->pay_type) == 'shift' ? 'none' : 'block' }}">
-        <label for="end_time" class="form-label">End Time</label>
+        <label for="end_time" class="form-label">Journey End Time</label>
         <input type="time" id="end_time" name="end_time" value="{{ old('end_time', $job->end_time) }}"
         class="form-control" required />
         @error('end_time')
@@ -173,6 +173,7 @@
       <div class="col-md-6 mt-4">
         <label for="local_authorities" class="form-label">Local Authorities</label>
         <select name="local_authorities" id="local_authorities" class="form-control">
+        <option value="">Select Local Authorities</option>
         <option value="City of London Corporation" {{ old('local_authorities', $job->local_authorities) == 'City of London Corporation' ? 'selected' : '' }}>City of London Corporation</option>
         <option value="City of Westminster" {{ old('local_authorities', $job->local_authorities) == 'City of Westminster' ? 'selected' : '' }}>City of Westminster</option>
         <option value="LB Barking and Dagenham" {{ old('local_authorities', $job->local_authorities) == 'LB Barking and Dagenham' ? 'selected' : '' }}>LB Barking and Dagenham</option>
@@ -216,6 +217,7 @@
       <div class="col-md-6 mt-4">
         <label for="trust" class="form-label">Trusty</label>
         <select name="trust" id="trust" class="form-control">
+        <option value="">Select Trust</option>
         <option value="BROMLEY HEALTHCARE" {{ old('trust', $job->trust) == 'BROMLEY HEALTHCARE' ? 'selected' : '' }}>
           BROMLEY HEALTHCARE</option>
         <option value="CHELSEA CORE" {{ old('trust', $job->trust) == 'CHELSEA CORE' ? 'selected' : '' }}>CHELSEA CORE

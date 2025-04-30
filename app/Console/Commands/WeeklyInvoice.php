@@ -37,7 +37,7 @@ class WeeklyInvoice extends Command
 
         // Retrieve jobs completed based on end_date and end_time
         $completedJobs = Job::selectRaw('*')
-           ->where('status', '!=', JobStatus::COMPLETED->value)
+            ->where('status', '!=', JobStatus::COMPLETED->value)
             ->whereHas('driversBids', function ($query) {
                 $query->where('assigned', 1); // Filter only assigned bids
             })
@@ -84,28 +84,33 @@ class WeeklyInvoice extends Command
                     if ($endTime && $endTime !== '00:00:00') {
                         $endDateTime .= ' ' . $endTime;
                     }
-                        // Log the concatenated date-time strings for debugging
+                    // Log the concatenated date-time strings for debugging
                     Log::info("Start DateTime: " . $startDateTime);
                     Log::info("End DateTime: " . $endDateTime);
-                  
+
                     $start = Carbon::parse($startDateTime);
                     $end = Carbon::parse($endDateTime);
-                     // Log to check the combined strings before parsing
-      
+                    // Log to check the combined strings before parsing
+
                     // Calculate total hours
                     $jobHours = $start->diffInMinutes($end) / 60;
                     $totalHours += $jobHours;
                     // Ensure hourly pay is numeric
                     $hourlyPay = floatval($job->hourly_pay);
                     // Calculate total amount
-                    $totalAmount += $jobHours * $hourlyPay;
+                    if ($job->pay_type == 'hourly') {
+                        $totalAmount += $jobHours * $hourlyPay;
+                    } else {
+                        $totalAmount += $job->hourly_pay;
+                    }
+
                     $job->update(['status' => JobStatus::COMPLETED->value]);
                 }
-                 $jobCount = $jobs->count();
+                $jobCount = $jobs->count();
                 // Create a single invoice for the driver
                 Invoice::create([
                     'driver_id' => $driverId,
-                    'total_hours' =>  round($totalHours, 2),
+                    'total_hours' => round($totalHours, 2),
                     'total_amount' => round($totalAmount, 2),
                     'total_job' => $jobCount,
                     'is_approved' => false,

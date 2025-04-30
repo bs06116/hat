@@ -24,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
+        'vehicle_type',
         'driver_number',
         'note',
         'rating',
@@ -78,8 +79,9 @@ class User extends Authenticatable
     public function driverJobs()
     {
         return $this->belongsToMany(Job::class, 'job_bid')
-                    ->withTimestamps();
-    }public function jobsBids()
+            ->withTimestamps();
+    }
+    public function jobsBids()
     {
         return $this->belongsToMany(Job::class, 'job_bid', 'driver_id', 'job_id');
     }

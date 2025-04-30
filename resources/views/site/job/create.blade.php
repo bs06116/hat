@@ -125,7 +125,7 @@
       <!-- Start Date and End Date (in one row) -->
       <div class="row mt-4">
       <div class="col-md-6">
-        <label for="start_date" class="form-label"><span id="journey_date_label">Start Date</span></label>
+        <label for="start_date" class="form-label"><span id="journey_date_label">Journey Start Date</span></label>
         <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}" class="form-control"
         required />
         @error('start_date')
@@ -133,7 +133,7 @@
     @enderror
       </div>
       <div class="col-md-6 end_date_container">
-        <label for="end_date" class="form-label">End Date</label>
+        <label for="end_date" class="form-label">Journey End Date</label>
         <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}" class="form-control"
         required />
         @error('end_date')
@@ -145,14 +145,14 @@
       <!-- Start Time and End Time (in one row) -->
       <div class="row mt-4">
       <div class="col-md-6">
-        <label for="start_time" class="form-label"><span id="journey_time_label">Start Time</span></label>
+        <label for="start_time" class="form-label"><span id="journey_time_label">Journey Start Time</span></label>
         <input type="time" id="start_time" name="start_time" class="form-control" required />
         @error('start_time')
       <div class="mt-2 text-danger">{{ $message }}</div>
     @enderror
       </div>
       <div class="col-md-6 end_time_container">
-        <label for="end_time" class="form-label">End Time</label>
+        <label for="end_time" class="form-label">Journey End Time</label>
         <input type="time" id="end_time" name="end_time" class="form-control" required />
         @error('end_time')
       <div class="mt-2 text-danger">{{ $message }}</div>
@@ -164,6 +164,7 @@
       <div class="col-md-6 mt-4">
         <label for="local_authorities" class="form-label">Local Authorities</label>
         <select name="local_authorities" id="local_authorities" class="form-control">
+        <option value="">Select Local Authorities</option>
         <option value="City of London Corporation">City of London Corporation</option>
         <option value="City of Westminster">City of Westminster</option>
         <option value="LB Barking and Dagenham">LB Barking and Dagenham</option>
@@ -206,6 +207,7 @@
       <div class="col-md-6 mt-4">
         <label for="trust" class="form-label">Trusty</label>
         <select name="trust" id="trust" class="form-control">
+        <option value="">Select Trust</option>
         <option value="BROMLEY HEALTHCARE">BROMLEY HEALTHCARE</option>
         <option value="CHELSEA CORE">CHELSEA CORE</option>
         <option value="CHELSEA COVID SUPPORT">CHELSEA COVID SUPPORT</option>
